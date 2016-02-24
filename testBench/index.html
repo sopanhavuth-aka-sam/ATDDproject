@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+	</head>
+	<body>
+		<p>Hello world!</p>
+		<script>
+			var dataset = []
+			
+			//parsing csv into an array of objects (row == object)
+			d3.csv("tag.csv", function(data) {
+				//type coversion for field that is integer
+				data.forEach(function(d) {
+					d.Ascention = +d.Ascention;
+					d.animal_length_fork = +d.animal_length_fork;
+					d.animal_length_total = +d.animal_length_total;
+					d.animal_weight = +d.animal_weight;
+					d.depth = + d.depth;
+				});//end: type coversion
+				//pass array to dataset
+				dataset = data;
+			});//end parsing csv
+		</script>
+	</body>
+</html>
