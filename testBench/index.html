@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta charset="utf-8">
 		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<script src="scripts/jquery.js"></script>
+		<script src="scripts/metro.js"></script>
+		<link href="css/metro.min.css" rel="stylesheet">
 	</head>
 	<body>
-		<p>Hello world!</p>
-		<script>
-			var dataset = []
+		<p><h1>Hello world!</h1></p>
+		
+		<script> //importing all data
+		
+			//store all detection data
+			var dataSet = [];
+			//store location, latitude, and longtitude data 
+			//(Station is for reference purpose only)
+			var locationSet = [];
+			//store species name for all detection
+			var speciesSet = [];
 			
-			//parsing csv into an array of objects (row == object)
+			//parsing "detection data(csv)" into an array of objects (row == object)
 			d3.csv("tag.csv", function(data) {
 				//type coversion for field that is integer
 				data.forEach(function(d) {
@@ -19,8 +31,25 @@
 					d.depth = + d.depth;
 				});//end: type coversion
 				//pass array to dataset
-				dataset = data;
-			});//end parsing csv
+				dataSet = data;
+			});//end parsing "detection data"
+			
+			//parsing "location data" into an array of objects (row == object)
+			d3.csv("Location.csv", function(data) {
+				//type coversion for field that is integer
+				data.forEach(function(d) {
+					d.Lat = +d.Lat;
+					d.Long = +d.Long;
+				});//end: type coversion
+				//pass array to locationSet
+				locationSet = data;
+			});//end parsing "Location data"
+			
+			//parsing "Species data" into an array of objects (row == object)
+			d3.csv("Species.csv", function(data) {
+				//pass array to locationSet
+				speciesSet = data;
+			});//end parsing "Species data"
 		</script>
 	</body>
 </html>
