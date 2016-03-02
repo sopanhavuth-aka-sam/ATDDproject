@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ATDD</title>
+
+    <link href="Metro-UI-CSS-master/docs/css/metro.css" rel="stylesheet">
+    <link href="Metro-UI-CSS-master/docs/css/metro-icons.css" rel="stylesheet">
+    <link href="Metro-UI-CSS-master/docs/css/metro-responsive.css" rel="stylesheet">
+    <link href="Metro-UI-CSS-master/docs/css/metro-schemes.css" rel="stylesheet">
+
+    <link href="Metro-UI-CSS-master/docs/css/docs.css" rel="stylesheet">
+
+    <script src="Metro-UI-CSS-master/docs/js/jquery-2.1.3.min.js"></script>
+    <script src="Metro-UI-CSS-master/docs/js/metro.js"></script>
+    <script src="Metro-UI-CSS-master/docs/js/docs.js"></script>
+    <script src="Metro-UI-CSS-master/docs/js/prettify/run_prettify.js"></script>
+    <script src="Metro-UI-CSS-master/docs/js/ga.js"></script>
+	
+	
+		<meta charset=utf-8 />
+		<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+		<script src='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.js'></script>
+		<link href='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.css' rel='stylesheet' />
+	
+	<style>
+
+		.container{
+			height: 100%;
+			width: 100%;
+			position: relative;
+		}
+			
+		#map { 
+			position:absolute; 
+			top:0;
+			bottom:0; 
+			width:75%; 
+		}
+		
+		#nav {
+			position: absolute;
+			right: 0;
+		    background-color:#eeeeee;
+			width:25%;
+			height:50%;
+			border: 0.5px solid #eeeeee;
+		}
+	
+		#details{
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			background-color: black;
+			width:25%;
+			height:50%;
+			color: white;
+			text-align: center;
+			border: 0.5px solid black;
+			
+		}
+		
+	</style>
+
+</head>
+<body>
+
+
+	<div id = "map">
+		<script>
+		L.mapbox.accessToken = 'pk.eyJ1IjoibWdsbW9udGVzIiwiYSI6ImNpbDhsZDV1YjBkNHd1MG0wd3Q3MnZpZmkifQ.6JR0V9EtTAhUeUi_tL4RJQ';
+		var map = L.mapbox.map('map', 'mapbox.streets')
+			.setView([33.40, -118.20], 9);		
+		</script>
+	</div>
+
+	<!--input requirement section-->
+	<div id = "nav">
+		<div class = "grid responsive">
+			<div class = "row cells2">
+				<!--species drop downmenu-->
+				<div class = "cell">
+					<ul class="horizontal-menu">
+						<li>
+							<a href="#" class="dropdown-toggle">Species</a>
+							<ul class="d-menu" data-role="dropdown">
+								<li><a href="#">Shark</a></li>
+								<li><a href="#">Gold Fish</a></li>
+								<li><a href="#">Manta ray</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+				<!--individual selection dropdown menu-->
+				<div class = "cell">
+					<ul class="horizontal-menu">
+						<li>
+							<a href="#" class="dropdown-toggle">Individual</a>
+							<ul class="d-menu" data-role="dropdown">
+								<li><a href="#">Nemo</a></li>
+								<li><a href="#">Dory</a></li>
+								<li><a href="#">Sharky</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!--radio buttons-->
+		<div data-role="group" data-group-type="one-state">
+			<button class="button">All</button>
+			<button class="button">Individual</button>
+		</div>
+		<!--start date and end date datepicker calendars-->
+		<!--<div class="grid responsive">-->
+			<div class="row cells2">
+				<div class="cell">
+					<h5>Start Date</h5>
+					<div class="input-control text" data-role="datepicker" data-date="1972-12-21" data-format="mmmm d, yyyy">
+						<input type="text">
+						<button class="button"><span class="mif-calendar"></span></button>
+					</div>
+				</div>
+				<div class="cell">
+					<h5>End Date</h5>
+					<div class="input-control text" data-role="datepicker" data-date="1972-12-21" data-format="mmmm d, yyyy">
+						<input type="text">
+						<button class="button"><span class="mif-calendar"></span></button>
+					</div>
+				</div>
+			</div>
+		<!--</div>-->
+	</div>
+	
+
+	<div id = "details">
+		<h1>Details go here.</h1>
+	</div>
+
+
+
+</body>
+</html>
