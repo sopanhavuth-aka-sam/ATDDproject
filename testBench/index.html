@@ -21,18 +21,16 @@
 			var speciesSet = [];
 			
 			//parsing "detection data(csv)" into an array of objects (row == object)
-			d3.csv("tag.csv", function(data) {
+			d3.csv("JWS_20150914_export.csv", function(data) {
 				//type coversion for field that is integer
 				data.forEach(function(d) {
-					d.Ascention = +d.Ascention;
-					d.animal_length_fork = +d.animal_length_fork;
-					d.animal_length_total = +d.animal_length_total;
-					d.animal_weight = +d.animal_weight;
-					d.depth = + d.depth;
+					d.Latitude = +d.Latitude;
+					d.Longitude = +d.Longitude;
 				});//end: type coversion
 				//pass array to dataset
 				dataSet = data;
 			});//end parsing "detection data"
+			
 			
 			//parsing "location data" into an array of objects (row == object)
 			d3.csv("Location.csv", function(data) {
