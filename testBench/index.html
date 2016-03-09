@@ -24,8 +24,12 @@
 			d3.csv("JWS_20150914_export.csv", function(data) {
 				//type coversion for field that is integer
 				data.forEach(function(d) {
+					//parse lat and long to int
 					d.Latitude = +d.Latitude;
 					d.Longitude = +d.Longitude;
+					//parse "Date and Time UTC" to date
+					d["Date and Time (UTC)"] = d["Date and Time (UTC)"].replace(/\s+/g, 'T');
+					d["Date and Time (UTC)"] = new Date(d["Date and Time (UTC)"]);
 				});//end: type coversion
 				//pass array to dataset
 				dataSet = data;
