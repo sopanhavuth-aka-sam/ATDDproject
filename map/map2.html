@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ATDD</title>
+
+	<meta charset="utf-8">
+	
+    <link href="Metro-UI-CSS-master/docs/css/metro.css" rel="stylesheet">
+    <link href="Metro-UI-CSS-master/docs/css/metro-icons.css" rel="stylesheet">
+    <link href="Metro-UI-CSS-master/docs/css/metro-responsive.css" rel="stylesheet">
+    <link href="Metro-UI-CSS-master/docs/css/metro-schemes.css" rel="stylesheet">
+    <link href="Metro-UI-CSS-master/docs/css/docs.css" rel="stylesheet">
+	<link href='https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.css' rel='stylesheet' />
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+	
+    <script src="Metro-UI-CSS-master/docs/js/jquery-2.1.3.min.js"></script>
+    <script src="Metro-UI-CSS-master/docs/js/metro.js"></script>
+    <script src="Metro-UI-CSS-master/docs/js/docs.js"></script>
+    <script src="Metro-UI-CSS-master/docs/js/prettify/run_prettify.js"></script>
+    <script src="Metro-UI-CSS-master/docs/js/ga.js"></script>
+	<script src="select2-4.0.0-beta.2/dist/js/select2.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src='https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.js'></script>
+	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+
+	<style>
+			
+		#map { 
+			position:absolute; 
+			top:0;
+			bottom:0; 
+			width:75%; 
+		}
+		
+		#nav {
+			position: absolute;
+			right: 0;
+		    background-color:#eeeeee;
+			width:25%;
+			height:50%;
+			border: 0.5px solid #eeeeee;
+		}
+	
+		#details{
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			background-color: black;
+			width:25%;
+			height:50%;
+			color: white;
+			text-align: center;
+			border: 0.5px solid black;
+			
+		}	
+	</style>
+</head>
+
+<body>
+	<div id = "map">
+		<script>
+		// code for side bar
+		//		$(document).ready(function() {
+//			$(".slct1").select2({
+//			placeholder: "Select species.",
+//			allowClear: true,
+//			data: speciesOptions
+//			});
+//		});
+//		
+//		$(document).ready(function() {
+//			$(".slct1").select2()
+//				.find(":selected")
+//				.data("id");
+//		});
+
+			//variable to store all detection data
+			var dataSet = [];
+			
+			//variable for bubble blinking
+			var blinkSize = [0, 10000, 0];
+			
+			//variable to store all detection pointer
+			var point = [];
+			
+			//parsing "detection data(csv)" into an array of objects (row == object)
+			d3.csv("detections.csv", function(data) {
+				//type coversion for field that is integer
+				data.forEach(function(d) {
+					//parse lat and long to int
+					d.Latitude = +d.Latitude;
+					d.Longitude = +d.Longitude;
+					//parse "Date and Time UTC" to date
+					d["Date and Time (UTC)"] = d["Date and Time (UTC)"].replace(/\s+/g, 'T');
+					d["Date and Time (UTC)"] = new Date(d["Date and Time (UTC)"]);
+				});//end: type coversion
+				//pass array to dataset
+				dataSet = data;
+			});//end parsing "detection data"
+			
+			//Initializing map to (33.40, -118.20)
+			var map = L.map('map').setView([33.40, -118.20], 8);
+			
+			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
+				maxZoom: 18,
+				attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+					'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+					'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+				id: 'mapbox.streets'
+			}).addTo(map);
+			//End - initialize map
+			
+			alert("imhere"); //This is a quick fixed to show data on map.
+							//for some reason, the data wont show unless alert happen here.
+  
+	
+			//generating circle base on death location and death count
+			dataSet.forEach(function(d) {
+				L.circle([d.Latitude, d.Longitude], 10000, {
+					color: 'orange',
+					fillColor: '#f03',
+					fillOpacity: 0.5
+				}).addTo(map);
+			});
+
+		</script>
+	</div>
+
+	<!--input requirement section-->
+	<div id = "nav">
+		<div class = "grid">
+			<div class = "row cells2">
+				<!--species drop downmenu-->
+				<div class = "cell">
+				
+				
+				
+						<select class = "slct1 full-size" >
+			
+	
+						</select>
+						
+						
+						
+						
+				</div>
+				<!--individual selection dropdown menu-->
+				<div class = "cell">
+					<div class="input-control full-size" data-role="select" data-placeholder="Select individual." data-allow-clear="true">
+						<select class="full-size">
+			
+						</select>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!--radio buttons-->
+		<div data-role="group" data-group-type="one-state">
+			<button class="button">All</button>
+			<button class="button">Individual</button>
+		</div>
+		<!--start date and end date datepicker calendars-->
+		<div class="grid">
+			<div class="row cells2">
+				<div class="cell">
+					<h5>Start Date</h5>
+					<div class="input-control text" data-role="datepicker" data-date="1972-12-21" data-format="mmmm d, yyyy">
+						<input type="text">
+						<button class="button"><span class="mif-calendar"></span></button>
+					</div>
+				</div>
+				<div class="cell">
+					<h5>End Date</h5>
+					<div class="input-control text" data-role="datepicker" data-date="1972-12-21" data-format="mmmm d, yyyy">
+						<input type="text">
+						<button class="button"><span class="mif-calendar"></span></button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+
+	<div id = "details">
+		<h1>Details go here.</h1>
+	</div>
+
+
+
+</body>
+</html>
