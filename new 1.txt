@@ -1,8 +1,0 @@
-		Day		Week		Month		year
-Hour	24		168			730.001		8760
-Day		1		7			30.4167		365
-Week	N/A		1			4.34524		52.1429
-month	N/A		N/A			1			12
-
-If n < 1  too small
-If n > 200  too large
