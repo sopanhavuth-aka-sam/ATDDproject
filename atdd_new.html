@@ -8,19 +8,122 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     <script src='https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.js'></script>
     <link href='https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.css' rel='stylesheet' />
+	
+	<script src="jquery-2.2.3.min.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+	<script src="Zebra_Datepicker-master/public/javascript/zebra_datepicker.js"></script>
+	<link href="Zebra_Datepicker-master/public/css/default.css" rel="stylesheet">
 
 <style>
-	#map { 
-	position:absolute; 
-	top:0;
-	bottom:0; 
-	width:100%; 
+	body
+	{
+		margin: 0;
+		padding: 0;
 	}
+
+	#map 
+	{ 
+		position:absolute; 
+		top:0;
+		bottom:0; 
+		width:75%; 
+	}
+	
 	#slider{
 		position: absolute;
 	}
 	
+	#input_section
+	{
+		position: absolute;
+		right: 0;
+		background-color:#eeeeee;
+		width:25%;
+		height:60%;
+		
+	}
 </style>
+
+<script>
+
+	//parsing "Species data" into an array of objects (row == object)
+	d3.csv("Species.csv", function(data) {
+		//pass array to locationSet
+		speciesSet = data;
+	});//end parsing "Species data"
+	alert("Hello");
+	var speciesOptions = []; 
+	
+	for(i = 0; i < speciesSet.length; i++){
+		speciesOptions[i] = {id: i, text: speciesSet[i].species_name};
+	}
+
+	$(document).ready(function() {
+		$(".slct1").select2({
+		placeholder: "Select Species.",
+		allowClear: true,
+		data: speciesOptions, 
+		});
+		
+		//DISPLAYING SPECIE INPUT WHEN 'GET VALUE' IS CLICKED                <----------------------------------
+		$(".getValue").click(function() {
+		input_specie= $(".slct1").val();									//SAVING INPUT AS A VALUE TYPE TO input_specie
+		console.log("Specie: "+ input_specie);
+		});
+	});	
+	
+	$(document).ready(function() {
+		$(".slct2").select2({
+		placeholder: "Select Individual.",
+		allowClear: true,
+		data: speciesOptions,
+		maximumSelectionLength: 3
+		});
+		
+		//DISPLAYING INDIVIDUAL INPUT WHEN 'GET VALUE' IS CLICKED                <----------------------------------
+		$(".getValue").click(function() {
+		input_indiv= $(".slct2").val();										//SAVING INPUT AS A VALUE TYPE TO input_indiv
+		console.log("Individual: "+ input_indiv);
+		});
+
+	});
+
+	//radio button
+	$(document).ready(function() {
+		$("input:radio[name=radio_button]").click(function() {
+			var checkval = $(this).val();
+			$(".slct2").prop("disabled",(checkval == "0"));
+			$(".slct2").select2("val", "");
+
+		});
+	});	
+	
+	//Zebra_datepicker
+	$(document).ready(function() {
+	$("#startdate").Zebra_DatePicker();
+	
+	//DISPLAYING START DATE INPUT WHEN 'GET VALUE' IS CLICKED                <----------------------------------
+	$(".getValue").click(function() {
+	//SAVING START DATE INPUT											<------------------------------------
+	var start_date = new Date($("#startdate").val().concat("T00:00:00"));
+	console.log("Start date: "+ start_date);
+	console.log(typeof start_date);
+		});
+	});
+	
+	$(document).ready(function() {
+	$("#enddate").Zebra_DatePicker();
+	
+	//DISPLAYING END DATE INPUT WHEN 'GET VALUE' IS CLICKED                <----------------------------------------
+	$(".getValue").click(function() {
+	//SAVING END DATE 													<--------------------------------------
+	var end_date = new Date($("#enddate").val().concat("T23:59:59"));
+	console.log("End date: "+ end_date);
+		});
+	});
+	
+</script>
 
 </head>
 <body>
@@ -49,10 +152,29 @@
 	
 	<div id="slider">
 		<input type='range' min='0' max='6' step='1' value='0' id='rangeSlider' /> 
-	<button type="button" id="start">start</button>
-	<button type="button" id="stop">stop</button>
+		<button type="button" id="start">start</button>
+		<button type="button" id="stop">stop</button>
 	</div>
-
+	
+	<div id = "input_section">
+		<select class="slct1">
+			<option></option>
+		</select>
+		
+		<select class="slct2">
+			<option></option>
+		</select>
+		
+		<br>
+		
+		<input type="radio" name="radio_button" value="0" checked>All
+		<input type="radio" name="radio_button" value="1">Individual
+		
+		<br>
+		
+		Start Date <div><input id="startdate" type="text"></div>
+		End Date <div><input id="enddate" type="text"></div>
+	</div>
 
 <script>	
 
@@ -131,18 +253,29 @@ const MONTHLY = 2628000000;
 			break;
 	}
 	
-	console.log(dots.length);
-	
-	for(i = 0; i < dots.length; i++)
-	{
-		console.log(dots[i]);
-	}
-	
 	var circles = svg.selectAll("circle")
 					.data(dots)
 					.enter()
-					.append("circle")
-					.attr("r", 0)	
+					.append("circle")	
+					.attr("cx", function(d)
+					{
+						//if(d.tm === currentStep)
+							return project(d).x;//simply use return project(d).x to display all (no if statement)
+					})
+					.attr("cy", function(d)
+					{
+						//if(d.tm === currentStep)
+							return project(d).y;//simply use return project(d).y to display all (no if statement)
+					})
+					.style({
+						fill: "#ff1a1a",
+						"fill-opacity": 0.6,
+						stroke: "#004d60",
+						"stroke-width": 1
+					})
+					.attr("r", 2)
+
+
 	
     function project(ll) 
 	{
@@ -172,13 +305,15 @@ const MONTHLY = 2628000000;
 		.transition().duration(500)
 		.attr("r", function(d)
 		{
-			//if(d.tm === currentStep)
+			if(d.tm === currentStep)
 				return d.rad;//simply use return d.rad to display all (no if statement)
+			else
+				return 2;
 		})
 
 		circles
 		.transition().duration(500).delay(500)
-		.attr("r", 0)
+		.attr("r", 2)
 		
 	}
 
