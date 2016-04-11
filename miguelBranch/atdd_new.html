@@ -48,11 +48,19 @@
 <script>
 
 	//parsing "Species data" into an array of objects (row == object)
-	d3.csv("Species.csv", function(data) {
-		//pass array to locationSet
-		speciesSet = data;
-	});//end parsing "Species data"
-	alert("Hello");
+	function parseSpecie() {
+		//var deferredObj = $.Deferred();
+		var dataset = [];
+		d3.csv("Species.csv", function(data) {
+			dataset = data;
+			console.log(dataset);
+		});//end parsing "Species data"
+		//deferredObj.resolve();
+		return dataset;
+	}
+	
+	var speciesSet = parseSpecie();
+	console.log(speciesSet);
 	var speciesOptions = []; 
 	
 	for(i = 0; i < speciesSet.length; i++){
@@ -114,23 +122,29 @@
 			direction: 1
 		});
 		
-		//DISPLAYING START DATE INPUT WHEN 'Generate' IS CLICKED                <----------------------------------
-		$("#generateBtn").click(function() {
-			//SAVING START DATE AND END DATE INPUT											<------------------------------------
+	//DISPLAYING START DATE INPUT WHEN 'Generate' IS CLICKED                <----------------------------------
+	$("#generateBtn").click(function() {
+			//reset rannge slider
+			$("#rangeSlider").val("0");
+			//SAVING START DATE AND END DATE INPUT
 			start_date = new Date($("#startdate").val().concat("T00:00:00"));
 			end_date = new Date($("#enddate").val().concat("T00:00:00"));
-			console.log("Start date: "+ start_date);//FOR DEBUG PURPOSE
-			console.log("End date: "+ end_date);//FOR DEBUG PURPOSE
-			validateDateInput(start_date, end_date);
+			
+			//Program Logic
+			//filter all detection base on dates by user's inputs
+			filteredDetections = dateFilter(allDetections, start_date, end_date); 
+			//warned user if filteredDetections is less than 1 (future implementation -> prevent play entirely)
+			if(filteredDetections.length < 1) {
+				alert("No detection within selected periods");
+			}
+			draw(filteredDetections);
+			//DEBUGGING
+			console.log(filteredDetections);
+			console.log("start date" + start_date);
+			console.log("end_date" + end_date);
+
 		});
 	});
-	
-	//date validation, MIGHT NOT NEED THIS AFTER CONSTRAINT THE START/END DATE INPUT
-	function validateDateInput(start_date,end_date) {
-		if(end_date<start_date) {
-			alert("EndDate have to be after StartDate");
-		}
-	}
 </script>
 
 </head>
@@ -209,8 +223,9 @@ const MONTHLY = 2628000000;
 
 	var allDetections = []; //store all detection from 'detection' file
 	var filteredDetections = []; //store all detections after filering process (filters are based on user's input)
-    //TO DO: SEPERATING DATA PASRING AND DATA FILTERING INTO FUNCTIONS
-	//MAKE GENERATE FUNCATION CALL FILTERING FUNCTION
+	
+	
+    //Parsing Data from input file
 	d3.csv("detections-1000data.csv", function(err, data) {
 	
 	for(i = 0; i < data.length; i++)
@@ -219,145 +234,154 @@ const MONTHLY = 2628000000;
 	}
 	
 	console.log(allDetections.length);//FOR DEBUG PURPOSE
-	console.log("Start date: "+ start_date);//FOR DEBUG PURPOSE
-	console.log("End date: "+ end_date);//FOR DEBUG PURPOSE
-	////START: data filtering////
-	for(i =0; i < allDetections.length - 1; i++) {
-		if(start_date <= allDetections[i].dateTime && allDetections[i].dateTime <= end_date) {
-			fileredDetections.push(allDetections[i]);
-		}
-	}
+	});
 	
-	////END: data filtering////
 	
-	var startDate = allDetections[0].dateTime;
-	var endDate = allDetections[allDetections.length-1].dateTime; 
-	
-	var startIndex = 0;
-	var endIndex = 0;
-	
-	//determine starting index (for the allDetections array) based on startDate
-	for(i = 0; i < allDetections.length; i++)
-	{
-		if(allDetections[i].dateTime.getTime() >= startDate.getTime())
-		{
-			startIndex = i; 
-			break;
-		}
-	}
-	
-	//Determine ending index (for the allDetections array) based on endDate
-	for(i = 0; i < allDetections.length; i++)
-	{
-		if(allDetections[i].dateTime.getTime() >= endDate.getTime())
-		{
-			endIndex = i; 
-			break;
-		}
-	}
-	
-	var dots = [];
-	var timeUnit = 3;//This value should be set based on user input 
-	
-	//selects time unit based on user input 
-	switch(timeUnit)
-	{
-		case 0:
-			dots = getHourlyDetections(startIndex, endIndex);
-			break;
-		case 1:
-			dots = getDailyDetections(startIndex, endIndex);
-			break;
-		case 2: 
-			dots = getWeeklyDetections(startIndex, endIndex);
-			break; 
-		case 3: 
-			dots = getMonthlyDetections(startIndex, endIndex);
-			break;
-	}
-	
-	var circles = svg.selectAll("circle")
-					.data(dots)
-					.enter()
-					.append("circle")	
-					.attr("cx", function(d)
-					{
-						//if(d.tm === currentStep)
-							return project(d).x;//simply use return project(d).x to display all (no if statement)
-					})
-					.attr("cy", function(d)
-					{
-						//if(d.tm === currentStep)
-							return project(d).y;//simply use return project(d).y to display all (no if statement)
-					})
-					.style({
-						fill: "#ff1a1a",
-						"fill-opacity": 0.6,
-						stroke: "#004d60",
-						"stroke-width": 1
-					})
-					.attr("r", 2)
-
-
-	
-    function project(ll) 
-	{
-		var point = map.latLngToLayerPoint(L.latLng(ll))
-		return point;	
-    }
-	
-	//This function will make the detections for the current hour blink
-	function drawDetections(currentStep){
-		circles
-		.attr("cx", function(d)
-		{
-			//if(d.tm === currentStep)
-				return project(d).x;//simply use return project(d).x to display all (no if statement)
-		})
-		.attr("cy", function(d)
-		{
-			//if(d.tm === currentStep)
-				return project(d).y;//simply use return project(d).y to display all (no if statement)
-		})
-		.style({
-			fill: "#ff1a1a",
-			"fill-opacity": 0.6,
-			stroke: "#004d60",
-			"stroke-width": 1
-		})
-		.transition().duration(500)
-		.attr("r", function(d)
-		{
-			if(d.tm === currentStep)
-				return d.rad;//simply use return d.rad to display all (no if statement)
-			else
-				return 2;
-		})
-
-		circles
-		.transition().duration(500).delay(500)
-		.attr("r", 2)
+	//Draw function: param input 
+	function draw(data) {
 		
-	}
+		//clear the svg canvas from previous session
+		svg.selectAll("circle").remove();
+		
+		var startDate = data[0].dateTime;
+		var endDate = data[data.length-1].dateTime; 
+		
+		var startIndex = 0;
+		var endIndex = 0;
+		
+		//determine starting index (for the data array) based on startDate
+		for(i = 0; i < data.length; i++)
+		{
+			if(data[i].dateTime.getTime() >= startDate.getTime())
+			{
+				startIndex = i; 
+				break;
+			}
+		}
+		
+		//Determine ending index (for the data array) based on endDate
+		for(i = 0; i < data.length; i++)
+		{
+			if(data[i].dateTime.getTime() >= endDate.getTime())
+			{
+				endIndex = i; 
+				break;
+			}
+		}
+		
+		var dots = [];
+		var timeUnit = 3;//This value should be set based on user input 
+		
+		//selects time unit based on user input 
+		switch(timeUnit)
+		{
+			case 0:
+				dots = getHourlyDetections(startIndex, endIndex);
+				break;
+			case 1:
+				dots = getDailyDetections(startIndex, endIndex);
+				break;
+			case 2: 
+				dots = getWeeklyDetections(startIndex, endIndex);
+				break; 
+			case 3: 
+				dots = getMonthlyDetections(startIndex, endIndex);
+				break;
+		}
+		
+		var circles = svg.selectAll("circle")
+						.data(dots)
+						.enter()
+						.append("circle")	
+						.attr("cx", function(d)
+						{
+							//if(d.tm === currentStep)
+								return project(d).x;//simply use return project(d).x to display all (no if statement)
+						})
+						.attr("cy", function(d)
+						{
+							//if(d.tm === currentStep)
+								return project(d).y;//simply use return project(d).y to display all (no if statement)
+						})
+						.style({
+							fill: "#ff1a1a",
+							"fill-opacity": 0.6,
+							stroke: "#004d60",
+							"stroke-width": 1
+						})
+						.attr("r", 2)
 
-	var myTimer;
-	d3.select("#start").on("click", function() {
-	 clearInterval (myTimer);
-		myTimer = setInterval (function() {
-			var b = d3.select("#rangeSlider");
-			var t = (+b.property("value") + 1) % (+b.property("max") + 1);
-			if (t == 0) { t = +b.property("min"); }
-			b.property("value", t);
-			drawDetections(t);
-		}, 1000);
-	});
 
-	d3.select("#stop").on("click", function() {
-		clearInterval (myTimer);
-	});		
+		
+		function project(ll) 
+		{
+			var point = map.latLngToLayerPoint(L.latLng(ll))
+			return point;	
+		}
+		
+		//This function will make the detections for the current hour blink
+		function drawDetections(currentStep){
+			circles
+			.attr("cx", function(d)
+			{
+				//if(d.tm === currentStep)
+					return project(d).x;//simply use return project(d).x to display all (no if statement)
+			})
+			.attr("cy", function(d)
+			{
+				//if(d.tm === currentStep)
+					return project(d).y;//simply use return project(d).y to display all (no if statement)
+			})
+			.style({
+				fill: "#ff1a1a",
+				"fill-opacity": 0.6,
+				stroke: "#004d60",
+				"stroke-width": 1
+			})
+			.transition().duration(500)
+			.attr("r", function(d)
+			{
+				if(d.tm === currentStep)
+					return d.rad;//simply use return d.rad to display all (no if statement)
+				else
+					return 2;
+			})
+
+			circles
+			.transition().duration(500).delay(500)
+			.attr("r", 2)
+			
+		}
+
+		var myTimer;
+		d3.select("#start").on("click", function() {
+		 clearInterval (myTimer);
+			myTimer = setInterval (function() {
+				var b = d3.select("#rangeSlider");
+				var t = (+b.property("value") + 1) % (+b.property("max") + 1);
+				if (t == 0) { t = +b.property("min"); }
+				b.property("value", t);
+				drawDetections(t);
+			}, 1000);
+		});
+
+		d3.select("#stop").on("click", function() {
+			clearInterval (myTimer);
+		});	
+	}//end: draw()
 	
-	});
-	
+	//filering data base on userInput(dates)
+	function dateFilter(data, start_date, end_date) {
+		var newData = [];
+		
+		for(i =0; i < data.length - 1; i++) {
+			if(start_date <= data[i].dateTime && data[i].dateTime <= end_date) {
+				newData.push(data[i]);
+			}
+		}
+		
+		return newData;
+	}//end: dateFilter()
 	
 	function getHourlyDetections(startIndex, endIndex)
 	{
@@ -487,7 +511,11 @@ const MONTHLY = 2628000000;
 		}
 		return dots;
 	}
-
+	
+	//clear function to clear every elements on the svg canvas
+	function clearDetection() {
+		circles.remove();
+	}
 </script>
 </body>
 </html>
