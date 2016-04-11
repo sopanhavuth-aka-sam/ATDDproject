@@ -103,36 +103,33 @@
 	var start_date;
 	var end_date;
 	
-	//Zebra_datepicker
+	//Zebra_datepicker, CONSTRAINT START/END DATE INPUT
 	$(document).ready(function() {
-	$("#startdate").Zebra_DatePicker();
-	
-	//DISPLAYING START DATE INPUT WHEN 'GET VALUE' IS CLICKED                <----------------------------------
-	$("#generateBtn").click(function() {
-	//SAVING START DATE INPUT											<------------------------------------
-	start_date = new Date($("#startdate").val().concat("T00:00:00"));
-	console.log("Start date: "+ start_date);
-	console.log(typeof start_date);
+		$("#startdate").Zebra_DatePicker({
+			direction: false,
+			pair: $("#enddate")
 		});
-
-	});
-	
-
-	
-	$(document).ready(function() {
-	$("#enddate").Zebra_DatePicker();
-	
-	//DISPLAYING END DATE INPUT WHEN 'GET VALUE' IS CLICKED                <----------------------------------------
-	$("#generateBtn").click(function() {
-	//SAVING END DATE 													<--------------------------------------
-	end_date = new Date($("#enddate").val().concat("T23:59:59"));
-	console.log("End date: "+ end_date);
+		$("#enddate").Zebra_DatePicker({
+			direction: false,
+			direction: 1
+		});
+		
+		//DISPLAYING START DATE INPUT WHEN 'Generate' IS CLICKED                <----------------------------------
+		$("#generateBtn").click(function() {
+			//SAVING START DATE AND END DATE INPUT											<------------------------------------
+			start_date = new Date($("#startdate").val().concat("T00:00:00"));
+			end_date = new Date($("#enddate").val().concat("T00:00:00"));
+			console.log("Start date: "+ start_date);//FOR DEBUG PURPOSE
+			console.log("End date: "+ end_date);//FOR DEBUG PURPOSE
+			validateDateInput(start_date, end_date);
 		});
 	});
 	
-	//date validation
-	if(end_date<start_date) {
-		alert("EndDate have to be after StartDate");
+	//date validation, MIGHT NOT NEED THIS AFTER CONSTRAINT THE START/END DATE INPUT
+	function validateDateInput(start_date,end_date) {
+		if(end_date<start_date) {
+			alert("EndDate have to be after StartDate");
+		}
 	}
 </script>
 
@@ -210,16 +207,26 @@ const MONTHLY = 2628000000;
 	  .style("top", topLeft.y + "px");
 	
 
-	var allDetections = [];
-    d3.csv("detections-1000data.csv", function(err, data) {
+	var allDetections = []; //store all detection from 'detection' file
+	var filteredDetections = []; //store all detections after filering process (filters are based on user's input)
+    //TO DO: SEPERATING DATA PASRING AND DATA FILTERING INTO FUNCTIONS
+	//MAKE GENERATE FUNCATION CALL FILTERING FUNCTION
+	d3.csv("detections-1000data.csv", function(err, data) {
 	
 	for(i = 0; i < data.length; i++)
 	{
 		allDetections[i] = {lat: data[i].Latitude, lng: data[i].Longitude, trans: data[i].Transmitter, dateTime: data[i]["Date and Time (UTC)"].replace(/\s+/g, 'T'), dateTime: new Date(data[i]["Date and Time (UTC)"])};
 	}
 	
-	console.log(allDetections.length);
+	console.log(allDetections.length);//FOR DEBUG PURPOSE
+	console.log("Start date: "+ start_date);//FOR DEBUG PURPOSE
+	console.log("End date: "+ end_date);//FOR DEBUG PURPOSE
 	////START: data filtering////
+	for(i =0; i < allDetections.length - 1; i++) {
+		if(start_date <= allDetections[i].dateTime && allDetections[i].dateTime <= end_date) {
+			fileredDetections.push(allDetections[i]);
+		}
+	}
 	
 	////END: data filtering////
 	
