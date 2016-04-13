@@ -197,13 +197,7 @@
 	  .style("top", topLeft.y + "px");
 	
 	//Global variables---------------------------------------------------
-	var startDate = new Date();
-	var endDate = new Date(); 
-	var startIndex = 0;
-	var endIndex = 0;
-	var timeUnit = 0;
 	var allDetections = [];
-	var dots = [];
 	var circles;			
 	//-----------------------------------------------------------------------	
 
@@ -216,10 +210,12 @@
 				//endDate = new Date($("#enddate").val().concat("T23:59:59"));
 				$("#start").prop('disabled', false);
 				$("#stop").prop('disabled', false);
-				startDate = allDetections[0].dateTime;
-				endDate = allDetections[allDetections.length-1].dateTime;
-				timeUnit = 0;
-				initDetections();
+				var startDate = allDetections[0].dateTime;
+				var endDate = allDetections[allDetections.length-1].dateTime;
+				var timeUnit = 0;
+				var dots = getDots(startDate, endDate, timeUnit);
+				fitToScreen(dots);
+				setTimeout(function(){ initDetections(dots); }, 500);
 				return "Clear"
 			}
 			else if(v === "Clear")
@@ -250,14 +246,8 @@
 	* It then adds that data to the circles svg element to create cirlces from that data. The circles
 	* are then displayed and blinked when the user clicks start.
 	*/
-	function initDetections()
+	function initDetections(dots)
 	{
-		startIndex = getStartingIndex(allDetections, startDate);
-		endIndex = getEndingIndex(allDetections, endDate);
-		
-		dots = getDots(startIndex, endIndex, timeUnit);
-		fitToScreen(dots);
-
 		circles = svg.selectAll("circle")
 					.data(dots)
 					.enter()
@@ -471,8 +461,11 @@
 	* @param timeUnit The time unit that the user has selected.
 	* @return array This returns the detections to be displayed based on a unit of time. 
 	*/
-	function getDots(startIndex, endIndex, timeUnit)//timeUnit is based on user input, hourly, daily, etc.
+	function getDots(startDate, endDate, timeUnit)//timeUnit is based on user input, hourly, daily, etc.
 	{
+		var startIndex = getStartingIndex(allDetections, startDate);
+		var endIndex = getEndingIndex(allDetections, endDate);
+		
 		var dots = [];
 		switch(timeUnit)
 		{
