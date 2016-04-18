@@ -86,9 +86,9 @@
 		data: speciesOptions,
 		maximumSelectionLength: 3
 		});
-
 	});
 
+	/*
 	//radio button
 	$(document).ready(function() {
 		$("input:radio[name=radio_button]").click(function() {
@@ -98,6 +98,7 @@
 
 		});
 	});	
+	*/
 	
 	//Zebra_datepicker
 	$(document).ready(function() {
@@ -108,6 +109,31 @@
 		$("#enddate").Zebra_DatePicker();
 	});	
 	
+/*	
+	$(document).ready(function() {
+		$("input:radio[name=radio_button]").click(function() {
+			var checkval = $(this).val();
+			switch(checkval)
+			{
+				case "0":
+					$("#timeLabel").text("hour");
+					break;
+				case "1": 
+					$("#timeLabel").text("day");
+					break;
+				case "2": 
+					$("#timeLabel").text("week");
+					break;
+				case "3": 
+					$("#timeLabel").text("month");
+					break;
+			}
+
+		});
+	});
+*/	
+
+
 </script>
 
 </head>
@@ -144,8 +170,10 @@
 		
 		<br>
 		
-		<input type="radio" name="radio_button" value="0" checked>All
-		<input type="radio" name="radio_button" value="1">Individual
+		<input type="radio" name="radio_button" value="0">Hourly
+		<input type="radio" name="radio_button" value="1">Daily 
+		<input type="radio" name="radio_button" value="2">Weekly 
+		<input type="radio" name="radio_button" value="3">Monthly
 		
 		<br>
 		
@@ -164,10 +192,12 @@
 		<br>
 		
 		<div id="slider">
-			<input type='range' min='0' max='6' step='1' value='0' id='rangeSlider' disabled /> 
+			<input type='range' step = 1 value='0' id='rangeSlider' disabled /> 
 			<button type="button" id="start" disabled>start</button>
-			<button type="button" id="stop" disabled>stop</button>
+			<button type="button" id="stop" disabled>stop</button><br>
+			<!--Current <code id="timeLabel"></code>	: <code id="currentStep"></code>--->
 		</div>
+		
 	</div>
 	
 	<div id="details">
@@ -186,7 +216,7 @@
 	
     // Setup our svg layer that we can manipulate with d3
     var svg = d3.select(map.getPanes().overlayPane)
-      .append("svg");
+      .append("svg");	
 	  
 	var bounds = map.getBounds();
 	var topLeft = map.latLngToLayerPoint(bounds.getNorthWest())
@@ -198,7 +228,7 @@
 	
 	//Global variables---------------------------------------------------
 	var allDetections = [];
-	var circles;			
+	var circles;
 	//-----------------------------------------------------------------------	
 
 	//Event listener for the generate/clear button
@@ -206,32 +236,103 @@
 		$(this).text(function(i, v){
 			if(v === "Generate")
 			{
-				//startDate = new Date($("#startdate").val().concat("T00:00:00"));
-				//endDate = new Date($("#enddate").val().concat("T23:59:59"));
-				$("#start").prop('disabled', false);
-				$("#stop").prop('disabled', false);
-				var startDate = allDetections[0].dateTime;
-				var endDate = allDetections[allDetections.length-1].dateTime;
-				var timeUnit = 0;
-				var dots = getDots(startDate, endDate, timeUnit);
-				fitToScreen(dots);
-				setTimeout(function(){ initDetections(dots); }, 500);
-				return "Clear"
-			}
-			else if(v === "Clear")
-			{
-				$("#start").prop('disabled', true);
-				$("#stop").prop('disabled', true);
-				$("#rangeSlider").val("0");
-				$("#date").text("");
-				$("#time").text("");
-				$("#lat").text("");
-				$("#lng").text("");
-				clearDetections();
-				return "Generate"
+
+				if($(".slct1 option:selected").val() === "" || $("#startdate").val() === "" || $("#enddate").val() === ""){
+					alert("Please fill out all fields.");
+				}
+			
+				else
+				{
+					//startDate = new Date($("#startdate").val().concat("T00:00:00"));
+					//endDate = new Date($("#enddate").val().concat("T23:59:59"));
+					$("#start").prop('disabled', false);
+					$("#stop").prop('disabled', false);
+					var startDate = allDetections[0].dateTime;
+					var endDate = allDetections[allDetections.length-1].dateTime;
+			
+					
+					var p1 = new Promise(function(resolve, reject){
+						var timeUnit = getTimeUnit();
+						if(timeUnit >= 0 && timeUnit <= 3)
+						{
+							resolve(timeUnit);
+						}
+						else
+						{
+							reject(-1);
+						}
+					});
+					
+					
+					///////////////////////////////////////////////////////////////////////////// Promise
+					p1.then(function(value){
+						return getDots(startDate, endDate, value);
+					}).then(function(value){
+						var sliderSteps = getSliderSteps(value);
+						setSliderSteps(sliderSteps);
+						return fitToScreen(value);
+					}).then(function(value){
+						setTimeout(function(){ initDetections(value); }, 300);
+					})
+					
+					/*
+					var timeUnit = getTimeUnit;
+					var dots = getDots(startDate, endDate, timeUnit);
+					fitToScreen(dots);
+					setTimeout(function(){ initDetections(dots); }, 300);
+					*/
+					return "Clear"
+					}
+				}
+				else if(v === "Clear")
+				{
+					$("#start").prop('disabled', true);
+					$("#stop").prop('disabled', true);
+					$("#rangeSlider").val("0");
+					$("#date").text("");
+					$("#time").text("");
+					$("#lat").text("");
+					$("#lng").text("");
+					var sd = $("#startdate").data("Zebra_DatePicker");
+					sd.clear_date();
+					var ed = $("#enddate").data("Zebra_DatePicker");
+					ed.clear_date();
+					$(".slct1").select2("val", "");
+					clearDetections();
+					return "Generate"
 			}
 		});
 	});	  
+	
+	function getSliderSteps(dots)
+	{
+		return dots[dots.length-1].tm;
+	}
+	
+	function setSliderSteps(steps)
+	{
+		console.log(steps);
+        $('#rangeSlider').prop({
+            'min': 0,
+            'max': steps
+        });
+	}
+	
+	
+	function getTimeUnit()
+	{
+		var selection = document.getElementsByName("radio_button");
+		var timeUnit = 0;
+		for(var i = selection.length; i--;)
+		{
+			if(selection[i].checked)
+			{
+				timeUnit = selection[i].value;
+			}
+		}
+		
+		return Number(timeUnit); 
+	}
 	 
     d3.csv("phonieData.csv", function(err, data) {
 		
@@ -247,7 +348,7 @@
 	* are then displayed and blinked when the user clicks start.
 	*/
 	function initDetections(dots)
-	{
+	{ 	
 		circles = svg.selectAll("circle")
 					.data(dots)
 					.enter()
@@ -343,6 +444,7 @@
 	function fitToScreen(dots)
 	{
 		map.fitBounds(dots);
+		return dots;
 	}
 	
 	/*This functions gets the latitude of a detection.
