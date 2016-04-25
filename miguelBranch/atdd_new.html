@@ -48,54 +48,65 @@
 <script>
 
 	//parsing "Species data" into an array of objects (row == object)
-	function parseSpecie() {
-		//var deferredObj = $.Deferred();
+
+	var speciesPromise = new Promise(function(resolve, reject){
 		var dataset = [];
 		d3.csv("Species.csv", function(data) {
 			dataset = data;
-			console.log(dataset);
-		});//end parsing "Species data"
-		//deferredObj.resolve();
-		return dataset;
-	}
-	
-	var speciesSet = parseSpecie();
-	console.log(speciesSet);
-	var speciesOptions = []; 
-	
-	for(i = 0; i < speciesSet.length; i++){
-		speciesOptions[i] = {id: i, text: speciesSet[i].species_name};
-	}
-
-	$(document).ready(function() {
-		$(".slct1").select2({
-		placeholder: "Select Species.",
-		allowClear: true,
-		data: speciesOptions, 
-		});
-		
-		//DISPLAYING SPECIE INPUT WHEN 'GET VALUE' IS CLICKED                <----------------------------------
-		$(".getValue").click(function() {
-		input_specie= $(".slct1").val();									//SAVING INPUT AS A VALUE TYPE TO input_specie
-		console.log("Specie: "+ input_specie);
-		});
-	});	
-	
-	$(document).ready(function() {
-		$(".slct2").select2({
-		placeholder: "Select Individual.",
-		allowClear: true,
-		data: speciesOptions,
-		maximumSelectionLength: 3
-		});
-		
-		//DISPLAYING INDIVIDUAL INPUT WHEN 'GET VALUE' IS CLICKED                <----------------------------------
-		$(".getValue").click(function() {
-		input_indiv= $(".slct2").val();										//SAVING INPUT AS A VALUE TYPE TO input_indiv
-		console.log("Individual: "+ input_indiv);
-		});
-
+			if(dataset.length > 0) {
+				resolve(dataset);
+			}
+			else {
+			console.log(dataset.length);
+				reject("Parsing Specices Fail");
+			}		
+		});	
 	});
+
+	
+	speciesPromise.then(
+		function(dataset) {
+			var speciesOptions = []; 
+			
+			for(i = 0; i < dataset.length; i++){
+				speciesOptions[i] = {id: i, text: dataset[i].species_name};
+			}
+
+			$(document).ready(function() {
+				$(".slct1").select2({
+				placeholder: "Select Species.",
+				allowClear: true,
+				data: speciesOptions, 
+				});
+				
+				//DISPLAYING SPECIE INPUT WHEN 'GET VALUE' IS CLICKED                <----------------------------------
+				$(".getValue").click(function() {
+				input_specie= $(".slct1").val();									//SAVING INPUT AS A VALUE TYPE TO input_specie
+				console.log("Specie: "+ input_specie);
+				});
+			});	
+			
+			$(document).ready(function() {
+				$(".slct2").select2({
+				placeholder: "Select Individual.",
+				allowClear: true,
+				data: speciesOptions,
+				maximumSelectionLength: 3
+				});
+				
+				//DISPLAYING INDIVIDUAL INPUT WHEN 'GET VALUE' IS CLICKED                <----------------------------------
+				$(".getValue").click(function() {
+				input_indiv= $(".slct2").val();										//SAVING INPUT AS A VALUE TYPE TO input_indiv
+				console.log("Individual: "+ input_indiv);
+				});
+			});
+		}
+	).catch(
+		function(err) {
+			console.log(err);
+		}
+	);
+
 
 	//radio button
 	$(document).ready(function() {
@@ -138,11 +149,6 @@
 				alert("No detection within selected periods");
 			}
 			draw(filteredDetections);
-			//DEBUGGING
-			console.log(filteredDetections);
-			console.log("start date" + start_date);
-			console.log("end_date" + end_date);
-
 		});
 	});
 </script>
@@ -228,12 +234,10 @@ const MONTHLY = 2628000000;
     //Parsing Data from input file
 	d3.csv("detections-1000data.csv", function(err, data) {
 	
-	for(i = 0; i < data.length; i++)
-	{
-		allDetections[i] = {lat: data[i].Latitude, lng: data[i].Longitude, trans: data[i].Transmitter, dateTime: data[i]["Date and Time (UTC)"].replace(/\s+/g, 'T'), dateTime: new Date(data[i]["Date and Time (UTC)"])};
-	}
-	
-	console.log(allDetections.length);//FOR DEBUG PURPOSE
+		for(i = 0; i < data.length; i++)
+		{
+			allDetections[i] = {lat: data[i].Latitude, lng: data[i].Longitude, trans: data[i].Transmitter, dateTime: data[i]["Date and Time (UTC)"].replace(/\s+/g, 'T'), dateTime: new Date(data[i]["Date and Time (UTC)"])};
+		}
 	});
 	
 	
@@ -249,6 +253,9 @@ const MONTHLY = 2628000000;
 		var startIndex = 0;
 		var endIndex = 0;
 		
+		//What the point of finding starting and ending index?
+		//data that got pass in should already be filtered
+		//-> so shouldn't startIndex and endIndex be 0 and lenght - 1, respectively?
 		//determine starting index (for the data array) based on startDate
 		for(i = 0; i < data.length; i++)
 		{
@@ -319,6 +326,10 @@ const MONTHLY = 2628000000;
 			return point;	
 		}
 		
+		const MAX_RADIUS = 30;
+		var maxDetectionCount = Math.max.apply(Math,dots.map(function(o){
+										return o.count;
+									})); //maximum detection at a single location/dot
 		//This function will make the detections for the current hour blink
 		function drawDetections(currentStep){
 			circles
@@ -342,7 +353,8 @@ const MONTHLY = 2628000000;
 			.attr("r", function(d)
 			{
 				if(d.tm === currentStep)
-					return d.rad;//simply use return d.rad to display all (no if statement)
+					//return d.rad;//simply use return d.rad to display all (no if statement)
+					return d.count * MAX_RADIUS / maxDetectionCount;
 				else
 					return 2;
 			})
@@ -383,14 +395,15 @@ const MONTHLY = 2628000000;
 		return newData;
 	}//end: dateFilter()
 	
+	//time measurement??
 	function getHourlyDetections(startIndex, endIndex)
 	{
 		var dots = [];
-		var traversalIndex = startIndex;
+		var traversalIndex = startIndex; //traversalIndex: current index in allDetections that the program is on.
 		var timeMeasurement = 0;
-		var currentTm = Math.floor(allDetections[startIndex].dateTime.getTime() / HOURLY);
+		var currentTm = Math.floor(allDetections[startIndex].dateTime.getTime() / HOURLY);//time interval
 	 
-		dots[dots.length] = {lat: allDetections[startIndex].lat, lng: allDetections[startIndex].lng, rad: 7, tm: timeMeasurement};
+		dots[dots.length] = {lat: allDetections[startIndex].lat, lng: allDetections[startIndex].lng, rad: 7, tm: timeMeasurement};//chenage rad to count
 		traversalIndex++;
 		while(traversalIndex <= endIndex)
 		{
@@ -487,19 +500,22 @@ const MONTHLY = 2628000000;
 		var timeMeasurement = 0;
 		var currentTm = Math.floor(allDetections[startIndex].dateTime.getTime() / MONTHLY);
 	 
-		dots[dots.length] = {lat: allDetections[startIndex].lat, lng: allDetections[startIndex].lng, rad: 5, tm: timeMeasurement};
+//		dots[dots.length] = {lat: allDetections[startIndex].lat, lng: allDetections[startIndex].lng, rad: 5, tm: timeMeasurement};
+		dots[dots.length] = {lat: allDetections[startIndex].lat, lng: allDetections[startIndex].lng, count: 0, tm: timeMeasurement};
 		while(traversalIndex <= endIndex)
 		{
 			if(currentTm === Math.floor(allDetections[traversalIndex].dateTime.getTime() / MONTHLY))
 			{
 				if(allDetections[traversalIndex].lat === dots[dots.length-1].lat && allDetections[traversalIndex].lng === dots[dots.length-1].lng)
 				{
-					dots[dots.length-1].rad += 1;
+//					dots[dots.length-1].rad += 1;
+					dots[dots.length-1].count += 1;
 					traversalIndex++;
 				}
 				else
 				{
-					dots[dots.length] = {lat: allDetections[traversalIndex].lat, lng: allDetections[traversalIndex].lng, rad: 5, tm: timeMeasurement};
+//					dots[dots.length] = {lat: allDetections[traversalIndex].lat, lng: allDetections[traversalIndex].lng, rad: 5, tm: timeMeasurement};
+					dots[dots.length] = {lat: allDetections[traversalIndex].lat, lng: allDetections[traversalIndex].lng, count: 0, tm: timeMeasurement};
 					traversalIndex++;
 				}
 			}
