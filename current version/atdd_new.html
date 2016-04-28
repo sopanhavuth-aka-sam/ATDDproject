@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
 
-
-
 	<meta charset="utf-8">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     <script src='https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.js'></script>
-    <link href='https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.css' rel='stylesheet' />
-	
 	<script src="jquery-2.2.3.min.js"></script>
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
 	<script src="Zebra_Datepicker-master/public/javascript/zebra_datepicker.js"></script>
+	<script src="xdate.js"></script>
+	
+    <link href='https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.css' rel='stylesheet' />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
 	<link href="Zebra_Datepicker-master/public/css/default.css" rel="stylesheet">
+	moment.js
 
 <style>
 	body
@@ -293,6 +293,7 @@
 						return getDots(startDate, endDate, value);
 					}).then(function(value){
 						var sliderSteps = getSliderSteps(value);
+
 						setSliderSteps(sliderSteps);
 						return fitToScreen(value);
 					}).then(function(value){
@@ -361,9 +362,9 @@
     d3.csv("detections.csv", function(err, data) {
 		
 		for(i = 0; i < data.length; i++)
-		{
-			//allDetections[i] = {lat: data[i].Latitude, lng: data[i].Longitude, dateTime: data[i]["Date and Time (UTC)"].replace(/\s+/g, 'T'), dateTime: new Date(data[i]["Date and Time (UTC)"])};
-			allDetections[i] = {lat: data[i].Latitude, lng: data[i].Longitude, dateTime: new Date(data[i]["Date and Time (UTC)"].replace(/\s+/g, 'T'))};
+		{	
+			//use library XDate to help convert date; [0] is needed because otherwise 'date object' is inside an array of object.
+			allDetections[i] = {lat: data[i].Latitude, lng: data[i].Longitude, dateTime: (new XDate (data[i]["Date and Time (UTC)"].replace(/\s+/g, 'T'), true))[0]};
 		}	
 		console.log("parsing done");
 	});
@@ -580,9 +581,9 @@
 		//Determine ending index (for the allDetections array) based on endDate
 		for(i = 0; i < allDetections.length; i++)
 		{
-			if(allDetections[i].dateTime.getTime() >= endDate.getTime())
+			if(allDetections[i].dateTime.getTime() > endDate.getTime())
 			{
-				endIndex = i; 
+				endIndex = i - 1; 
 				break;
 			}
 		}
@@ -642,7 +643,8 @@
 		{
 			if(currentTm === Math.floor(allDetections[traversalIndex].dateTime.getTime() / HOURLY))
 			{
-				if(allDetections[traversalIndex].lat === dots[dots.length-1].lat && allDetections[traversalIndex].lng === dots[dots.length-1].lng)
+				if(allDetections[traversalIndex].lat === dots[dots.length-1].lat && allDetections[traversalIndex].lng === dots[dots.length-1].lng
+					&& timeMeasurement == dots[dots.length-1].tm)
 				{
 					//dots[dots.length-1].rad += 1;
 					dots[dots.length-1].count += 1;
@@ -682,7 +684,8 @@
 		{
 			if(currentTm === Math.floor(allDetections[traversalIndex].dateTime.getTime() / DAILY))
 			{
-				if(allDetections[traversalIndex].lat === dots[dots.length-1].lat && allDetections[traversalIndex].lng === dots[dots.length-1].lng)
+				if(allDetections[traversalIndex].lat === dots[dots.length-1].lat && allDetections[traversalIndex].lng === dots[dots.length-1].lng
+					&& timeMeasurement == dots[dots.length-1].tm)
 				{
 					//dots[dots.length-1].rad += 1;
 					dots[dots.length-1].count += 1;
@@ -725,7 +728,8 @@
 		{
 			if(currentTm === Math.floor(allDetections[traversalIndex].dateTime.getTime() / WEEKLY))
 			{
-				if(allDetections[traversalIndex].lat === dots[dots.length-1].lat && allDetections[traversalIndex].lng === dots[dots.length-1].lng)
+				if(allDetections[traversalIndex].lat === dots[dots.length-1].lat && allDetections[traversalIndex].lng === dots[dots.length-1].lng
+					&& timeMeasurement == dots[dots.length-1].tm)
 				{
 					//dots[dots.length-1].rad += 1;
 					dots[dots.length-1].count += 1;
@@ -765,7 +769,8 @@
 		{
 			if(currentTm === Math.floor(allDetections[traversalIndex].dateTime.getTime() / MONTHLY))
 			{
-				if(allDetections[traversalIndex].lat === dots[dots.length-1].lat && allDetections[traversalIndex].lng === dots[dots.length-1].lng)
+				if(allDetections[traversalIndex].lat === dots[dots.length-1].lat && allDetections[traversalIndex].lng === dots[dots.length-1].lng
+					&& timeMeasurement == dots[dots.length-1].tm)
 				{
 					//dots[dots.length-1].rad += 1;
 					dots[dots.length-1].count += 1;
