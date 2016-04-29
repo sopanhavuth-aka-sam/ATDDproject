@@ -55,6 +55,13 @@
 		color: white;
 		text-align: center;
 	}
+	#dateLabel
+	{
+		height: 75px;
+		width: 130px;
+		background-color: black;
+		color: white;
+	}
 </style>
 
 <script>
@@ -72,7 +79,7 @@
 	}
 
 	$(document).ready(function() {
-		$(".slct1").select2({
+		$("#slct1").select2({
 		placeholder: "Select Species.",
 		allowClear: true,
 		data: speciesOptions, 
@@ -80,7 +87,7 @@
 	});	
 	
 	$(document).ready(function() {
-		$(".slct2").select2({
+		$("#slct2").select2({
 		placeholder: "Select Individual.",
 		allowClear: true,
 		data: speciesOptions,
@@ -147,24 +154,24 @@
 			.setView([37.5, -120], 6);//33.40, -118.20
 			
 			// Disable drag and zoom handlers.
-			map.dragging.disable();
-			map.touchZoom.disable();
-			map.doubleClickZoom.disable();
-			map.scrollWheelZoom.disable();
-			map.keyboard.disable();
+//			map.dragging.disable();
+//			map.touchZoom.disable();
+//			map.doubleClickZoom.disable();
+//			map.scrollWheelZoom.disable();
+//			map.keyboard.disable();
 
 			// Disable tap handler, if present.
-			if (map.tap) map.tap.disable();
+//			if (map.tap) map.tap.disable();
 						
 		</script>
 	</div>
 	
 	<div id = "input_section">
-		<select class="slct1">
+		<select id="slct1">
 			<option></option>
 		</select>
 		
-		<select class="slct2">
+		<select id="slct2">
 			<option></option>
 		</select>
 		
@@ -192,10 +199,14 @@
 		<br>
 		
 		<div id="slider">
-			<input type='range' step = 1 value='0' id='rangeSlider' disabled /> 
+			<input type='range' id="rangeSlider" value="0" disabled /> 
 			<button type="button" id="start" disabled>start</button>
 			<button type="button" id="stop" disabled>stop</button><br>
 			<!--Current <code id="timeLabel"></code>	: <code id="currentStep"></code>--->
+			<div id="dateLabel">
+				<code id="currentDate"></code><br>
+				<code id="currentHour"></code>
+			</div>
 		</div>
 		
 	</div>
@@ -243,14 +254,14 @@
 			
 				else
 				{
-					//startDate = new Date($("#startdate").val().concat("T00:00:00"));
-					//endDate = new Date($("#enddate").val().concat("T23:59:59"));
+					var startDate = new Date($("#startdate").val().concat("T00:00:00"));
+					var endDate = new Date($("#enddate").val().concat("T23:59:59"));
+				
 					$("#start").prop('disabled', false);
 					$("#stop").prop('disabled', false);
-					var startDate = allDetections[0].dateTime;
-					var endDate = allDetections[allDetections.length-1].dateTime;
-			
-					
+					//var startDate = allDetections[0].dateTime;
+					//var endDate = allDetections[allDetections.length-1].dateTime;
+	
 					var p1 = new Promise(function(resolve, reject){
 						var timeUnit = getTimeUnit();
 						if(timeUnit >= 0 && timeUnit <= 3)
@@ -263,8 +274,6 @@
 						}
 					});
 					
-					
-					///////////////////////////////////////////////////////////////////////////// Promise
 					p1.then(function(value){
 						return getDots(startDate, endDate, value);
 					}).then(function(value){
@@ -298,7 +307,7 @@
 					var ed = $("#enddate").data("Zebra_DatePicker");
 					ed.clear_date();
 					$(".slct1").select2("val", "");
-					clearDetections();
+				
 					return "Generate"
 			}
 		});
@@ -311,7 +320,6 @@
 	
 	function setSliderSteps(steps)
 	{
-		console.log(steps);
         $('#rangeSlider').prop({
             'min': 0,
             'max': steps
@@ -334,13 +342,17 @@
 		return Number(timeUnit); 
 	}
 	 
-    d3.csv("phonieData.csv", function(err, data) {
+    d3.csv("JWS_20150914_export.csv", function(data) {
 		
 		for(i = 0; i < data.length; i++)
 		{
-			allDetections[i] = {lat: data[i].Latitude, lng: data[i].Longitude, dateTime: data[i]["Date and Time (UTC)"].replace(/\s+/g, 'T'), dateTime: new Date(data[i]["Date and Time (UTC)"])};
-		}	
+			allDetections[i] = {lat: data[i].Latitude, lng: data[i].Longitude, dateTime: new Date(data[i]["Date and Time (UTC)"].replace(/\s+/g, 'T'))};
+			//allDetections[i] = {lat: data[i].Latitude, lng: data[i].Longitude, dateTime: new Date(Date.UTC(data[i]["Date and Time (UTC)"].replace(/\s+/g, 'T')))};
+		}
+		console.log(allDetections[2]);
 	});
+	
+
 	
 	/*
 	* This function fills the dots array with detections based on the starting date and ending date. 
@@ -403,6 +415,14 @@
 					return 2;
 			})			
 		}
+		
+		//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		function dateTag(currentStep)
+		{
+			$("#currentDate").text(getSliderDate(dots, currentStep));
+			$("#currentHour").text(getSliderHour(dots, currentStep));
+		}
+		
 
 		/*Listener for the start button that moves the slider along and starts
 		* the animation. 
@@ -416,6 +436,7 @@
 				if (t == 0) { t = +b.property("min"); }
 				b.property("value", t);
 				drawDetections(t);
+				dateTag(t);//---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 			}, 1000);
 		});
 		
@@ -437,6 +458,35 @@
 				$("#lng").text(getLng(d3.select(this).attr("cx"), d3.select(this).attr("cy")));
 			});
 		});
+	}
+	
+	function getSliderDate(dots, currentStep)
+	{
+		var day = dots[currentStep].dateTime.getDate();
+		var month = dots[currentStep].dateTime.getMonth();
+		var year = dots[currentStep].dateTime.getFullYear();
+		var date = "Date: " + month.toString() + "/" + day.toString() + "/" + year.toString();
+		return date;
+	}
+	
+	function getSliderHour(dots, currentStep)
+	{
+		var hour = dots[currentStep].dateTime.getHours();
+		var time = "";
+		if (hour == 0 || hour == 24)
+		{
+			time = "Time: 12:00 am." 
+		}
+
+		else if(hour <= 12)
+		{
+			time = "Time: " + hour + ":00 am."
+		}
+		else if(hour > 12)
+		{
+			time = "Time: " + hour%12 + ":00 pm."
+		}
+		return time;
 	}
 
 	/* This function resizes the screen based on the detections. 
@@ -524,6 +574,7 @@
 	{
 		var startIndex = 0;
 		//determine starting index (for the allDetections array) based on startDate
+
 		for(i = 0; i < allDetections.length; i++)
 		{
 			if(allDetections[i].dateTime.getTime() >= startDate.getTime())
@@ -531,7 +582,7 @@
 				startIndex = i; 
 				break;
 			}
-		}
+		} 
 		return startIndex;
 	}
 	
@@ -547,9 +598,9 @@
 		//Determine ending index (for the allDetections array) based on endDate
 		for(i = 0; i < allDetections.length; i++)
 		{
-			if(allDetections[i].dateTime.getTime() >= endDate.getTime())
+			if(allDetections[i].dateTime.getTime() > endDate.getTime())
 			{
-				endIndex = i; 
+				endIndex = i-1; 
 				break;
 			}
 		}
@@ -567,7 +618,6 @@
 	{
 		var startIndex = getStartingIndex(allDetections, startDate);
 		var endIndex = getEndingIndex(allDetections, endDate);
-		
 		var dots = [];
 		switch(timeUnit)
 		{
@@ -633,31 +683,34 @@
 	function getDailyDetections(startIndex, endIndex)
 	{
 		var dots = [];
-		var traversalIndex = startIndex;
+		var traversalIndex = startIndex + 1;
 		var timeMeasurement = 0;
 		var currentTm = Math.floor(allDetections[startIndex].dateTime.getTime() / DAILY);
-	 
-		dots[dots.length] = {lat: allDetections[startIndex].lat, lng: allDetections[startIndex].lng, rad: 5, tm: timeMeasurement};
+		dots[dots.length] = {lat: allDetections[startIndex].lat, lng: allDetections[startIndex].lng, rad: 5, dateTime: allDetections[startIndex].dateTime, tm: timeMeasurement};
 		while(traversalIndex <= endIndex)
 		{
 			if(currentTm === Math.floor(allDetections[traversalIndex].dateTime.getTime() / DAILY))
 			{
-				if(allDetections[traversalIndex].lat === dots[dots.length-1].lat && allDetections[traversalIndex].lng === dots[dots.length-1].lng)
+				if(allDetections[traversalIndex].lat === dots[dots.length-1].lat && allDetections[traversalIndex].lng === dots[dots.length-1].lng && timeMeasurement == dots[dots.length-1].tm)
 				{
-					dots[dots.length-1].rad += 30;
+					dots[dots.length-1].rad += 1;
 					traversalIndex++;
 				}
 				else
 				{
-					dots[dots.length] = {lat: allDetections[traversalIndex].lat, lng: allDetections[traversalIndex].lng, rad: 5, tm: timeMeasurement};
-					traversalIndex++;
+					dots[dots.length] = {lat: allDetections[traversalIndex].lat, lng: allDetections[traversalIndex].lng, rad: 5, dateTime: allDetections[traversalIndex].dateTime, tm: timeMeasurement};
+					traversalIndex++; 
 				}
 			}
 			else
 			{
 				timeMeasurement++;
-				currentTm++;			
+				currentTm = Math.floor(allDetections[traversalIndex].dateTime.getTime() / DAILY);		
 			}		
+		}
+		for(i = 0; i < dots.length; i++)
+		{
+			console.log(dots[i]);
 		}
 		return dots;
 	}
