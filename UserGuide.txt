@@ -1,0 +1,68 @@
+ATDD User Guide
+===============
+
+Organization of the Manual 
+--------------------------
+This User Manual contains all essential information for the user to make full use of 
+the Acoustic Telemetry Data Display (ATDD). This manual includes a description of the 
+system functions, capabilities, and step-by-step procedures for system use.  Use graphics 
+as a reference to our instructions where possible. The manual format may be altered if
+another format is more suitable for the particular project.
+
+System Overview
+---------------
+Since 1966, when the shark lab was established at CSULB, it has studied physiological and 
+behavioral ecology of not only sharks but marine life in general. Not only to educate and
+further our understanding but to emphasize the effects of human activity on marine life
+and take action to conserve and restore depleted populations. The Acoustic Telemetry Data
+Display is a web based application that will display visual representations of marine life
+movement along the California coast. The shark lab has set up over 100 receivers along the
+California coast to record date, time, and id of tagged sharks and fishes. This data can be 
+used to plot a point on a map to pin point the location of any particular fish at the time
+when the fish is detected. The data collected by the receivers will be used by the ATDD system 
+to allow the user to see points on a map where certain species or individual fish have been 
+spotted. This system will help field professionals, learning institutions and the general public 
+further their knowledge about marine life behavior. The system will be specifically useful in the
+understanding of movement and migration patterns and what causes them. Focusing particularly in
+the influence of human activity, the ATDD system will help people understand how things like 
+offshore oil platforms and contaminants influence the movements and migration of fish along the coast. 
+
+Instructions
+------------
+1. Picking Species and/or Individual
+	The first step in using ATDD is by selecting species and/or individuals. 
+	By clicking on the drop down menu of Select Species we can pick what species
+	to display or we could select All to display all species. Moreover, we can 
+	select individual species by clicking on the <b>Select Individual drop down menu. 
+	Here we can select any individuals from the selected species to display on the map.
+	
+	Note: Selecting individual is not a mandatory field to generate the map animation.
+	
+2. Picking Dates and Setting the Time Frame
+	The next step is to pick our starting and ending date. First we click on Start Date
+	field and pick our starting date. Similarly, we click on End Date field to pick
+	our ending date. Next we have to decide our time frame. We can pick our time frame 
+	by simply clicking on one of the four options: Hourly, Daily, Weekly, and Monthly. 
+	
+	Note: It is recommended to pick a larger time frame if your start and end dates are
+		too far apart. If not, then the animation could be considerably longer.
+		
+3. Generate
+	After filling out all the required fields, such as: Select Specie, Start Date, End 
+	Date and time frame, we can click on Generate button to produce our animation. 
+	
+	Note: There will be a warning sign if there is a missing field(s). 
+	
+4. Start Animation
+	Our next step is clicking on the Start button. You would notice that the map is 
+	being adjusted accordingly and our detections are being generated on the map. 
+	You can pause the animation anytime by clicking on the Stop button. 
+	
+5. Details
+	As you may have noticed by now, there is a Details section to our interface. During
+	the animation, we can hover our mouse over any of the detections to get more information
+	such as: Date, Time, Latitude and Longitude of that detection.
+
+6. Clearing the Map
+	After generating and playing the animation, you can reset the map by clicking on Clear
+	button to clear all the field.	
