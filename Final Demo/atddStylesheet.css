@@ -1,0 +1,173 @@
+.container{
+	position: absolute;
+	background-color: #f2f2f2;
+	overflow: hidden;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+.initiallyHidden{
+	display: none;
+}
+	
+#map { 
+	position:absolute; 
+	top: 7%; 
+	bottom:0;
+	width: 100%;
+}
+
+#navBar{
+	position: fixed;
+	background-color: #ffffff;
+	top: 0;
+	width: 100%;
+	height: 7%;
+	display: flex;
+	justify-content: space-between;
+}
+
+#logo{
+	width: 150px;
+	height: 100%;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+#trackButton{
+	width: 100px;
+	height: 100%;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	color: Black;
+}
+
+#detailsButton{
+	width: 100px;
+	height: 100%;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	color: black;
+}
+
+#trackMenu{
+	position: relative;
+	top: 7%;
+	width: 35%;
+	height: 94%;
+	background: #ffffff;
+	border: 3px solid #e6e6e6;
+
+}
+
+#detailsMenu{
+	position: absolute;
+	top: 7%;
+	width: 300px;
+	height: 175px;
+	right: 0;
+	background-color: #cccccc;
+	text-align: center;
+	opacity: 0.7;
+}
+
+
+#radioContainer label{
+	display: inline-block;	
+    width:20%;
+    background-color:#EFEFEF;
+    border-radius:4px;
+    border:1px solid #D0D0D0;
+    overflow:auto;
+}
+
+#radioContainer label span {
+    font-size: 15px;
+    padding:5px 0px;
+    display:block;
+	color:#a6a6a6;
+}
+
+#radioContainer label input {
+  position:absolute;
+  top:-1000px;
+}
+
+#radioContainer input:checked + span {
+    background-color:#404040;
+    color:#F7F7F7;
+}
+
+#myTable{
+	display: table;
+	table-layout: fixed;
+	width: 75%;
+	height: 90%;
+}
+
+#sliderBox
+{
+	position: absolute;	
+	height: 48px;
+	width: 183px;
+	right: 1%; 
+	top: 8%;
+	border-radius: 2px;
+	border: 2px solid #e6e6e6;
+	background: white;
+	color: black;
+}
+
+#dateTag
+{
+	position: absolute;
+	height: 30px;
+	width: 125px;
+	right: 0;
+	bottom: 0;
+	color: black;
+	background-color: white;
+	line-height: 75%;
+}
+
+#play
+{
+	position: absolute;
+	left: 0;
+	bottom: 0;
+}
+
+#details
+{
+	display: none;
+	position: absolute;
+	height: 78px;
+	width: 180px;
+	color: #000000;
+	text-align: center;
+	background-color: #ffffff;
+}
+
+.items
+{
+    text-align: center;
+    display: table-row;
+	color: #404040;
+}
+
+.itemsSpan
+{
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.button
+{
+	border-radius: 4px;
+	padding:5px 10px;
+}
