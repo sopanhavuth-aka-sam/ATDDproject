@@ -11,12 +11,24 @@
 .initiallyHidden{
 	display: none;
 }
-	
-#map { 
-	position:absolute; 
-	top: 7%; 
-	bottom:0;
-	width: 100%;
+
+.items
+{
+    text-align: center;
+    display: table-row;
+	color: #404040;
+}
+
+.itemsSpan
+{
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.button
+{
+	border-radius: 4px;
+	padding:5px 10px;
 }
 
 #navBar{
@@ -24,9 +36,16 @@
 	background-color: #ffffff;
 	top: 0;
 	width: 100%;
-	height: 7%;
+	height: 60px;
 	display: flex;
 	justify-content: space-between;
+}
+	
+#map { 
+	position:absolute; 
+	top: 60px; 
+	bottom:0;
+	width: 100%;
 }
 
 #logo{
@@ -46,7 +65,7 @@
 	color: Black;
 }
 
-#detailsButton{
+#userGuideButton{
 	width: 100px;
 	height: 100%;
 	text-align: center;
@@ -57,23 +76,12 @@
 
 #trackMenu{
 	position: relative;
-	top: 7%;
-	width: 25%;
+	top: 60px;
+	width: 375px;
 	height: 94%;
 	background: #ffffff;
 	border: 3px solid #e6e6e6;
 
-}
-
-#detailsMenu{
-	position: absolute;
-	top: 7%;
-	width: 300px;
-	height: 175px;
-	right: 0;
-	background-color: #cccccc;
-	text-align: center;
-	opacity: 0.7;
 }
 
 
@@ -115,8 +123,8 @@
 	position: absolute;	
 	height: 48px;
 	width: 183px;
-	right: 1%; 
-	top: 8%;
+	right: 5px; 
+	top: 65px;
 	border-radius: 2px;
 	border: 2px solid #e6e6e6;
 	background: white;
@@ -151,23 +159,4 @@
 	color: #000000;
 	text-align: center;
 	background-color: #ffffff;
-}
-
-.items
-{
-    text-align: center;
-    display: table-row;
-	color: #404040;
-}
-
-.itemsSpan
-{
-    display: table-cell;
-    vertical-align: middle;
-}
-
-.button
-{
-	border-radius: 4px;
-	padding:5px 10px;
 }
