@@ -138,7 +138,7 @@
 				.style("top", topLeft.y + "px");
 
 			//Global variables---------------------------------------------------
-			var allDetections = [];
+			var allDetections = []; //instead of storing all detection, store server response.
 			var circles;
 			//-----------------------------------------------------------------------
 			//Event listener for the generate/clear button
@@ -411,6 +411,11 @@
 
 			//Cherie starts commenting here. Matt stop.
 
+			/*
+			*
+			*
+			*
+			*/
 			function getSliderDate(dots, currentStep)
 			{
 				var day = dots[currentStep].dateTime.getDate();
@@ -560,7 +565,7 @@
 			* @param startIndex The index on which to start adding detections from the allDetections array.
 			* @param endIndex The index on which to stop adding detections from the alldDetections array.
 			* @param timeUnit The time unit that the user has selected.
-			* @return array This returns the detections to be displayed based on a unit of time.
+			* @return array This returns the detections to be displayed based on a unit of time in an array called dots
 			*/
 			function getDots(startDate, endDate, timeUnit)//timeUnit is based on user input, hourly, daily, etc.
 			{
