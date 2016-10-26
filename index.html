@@ -412,9 +412,10 @@
 			//Cherie starts commenting here. Matt stop.
 
 			/*
-			*
-			*
-			*
+			* This method given the array of dots that
+			* currentStep is the index. A portion of the play line.
+			* /@param: dots is the array that has the user's queryed dots in it.
+			* Used at the dot if you hover over it displays the Date, location, time of detection.
 			*/
 			function getSliderDate(dots, currentStep)
 			{
@@ -424,6 +425,12 @@
 				var date = "Date:" + month.toString() + "/" + day.toString() + "/" + year.toString();
 				return date;
 			}
+
+			/*Called from DateTag.
+				Displayed on the top corner right.
+				@return: It returns the string that it will display in the small box in the top right
+					corner of the play box(made with js and css).
+			*/
 
 			function getSliderHour(dots, currentStep)
 			{
@@ -448,7 +455,7 @@
 			*/
 			function fitToScreen(dots)
 			{
-				map.fitBounds(dots);
+				map.fitBounds(dots); //calls the mapbox mqp object.
 				return dots;
 			}
 
