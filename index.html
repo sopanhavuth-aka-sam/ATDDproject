@@ -275,6 +275,7 @@
 			function initDetections(dots, timeUnit)
 			{
 
+				//d3
 			circles = svg.selectAll("circle")
 						.data(dots)
 						.enter()
@@ -300,11 +301,8 @@
 							return d.dateTime;
 						})
 
-
-
-
-				function dateTag(currentStep)
-				{
+		function dateTag(currentStep)
+		{
 					if(timeUnit === 0)
 					{
 						$("#currentHour").text(getSliderHour(dots, currentStep))
@@ -452,6 +450,7 @@
 			}
 
 			/* This function resizes the screen based on the detections.
+			* map is the mapbox library/api object.
 			*/
 			function fitToScreen(dots)
 			{
