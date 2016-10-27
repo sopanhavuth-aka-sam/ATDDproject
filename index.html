@@ -2,7 +2,7 @@
 <html>
 	<head>
 	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-<meta content="utf-8" http-equiv="encoding">
+	<meta content="utf-8" http-equiv="encoding">
 
 		<title>SharkLab ATDD</title>
 
@@ -29,15 +29,14 @@
 
 	<body>
 
-
 		<div class = "container">
 
 			<div id = "map">
-				<script>
 
+				<script>
 					L.mapbox.accessToken = 'pk.eyJ1IjoibWdsbW9udGVzIiwiYSI6ImNpbDhsZDV1YjBkNHd1MG0wd3Q3MnZpZmkifQ.6JR0V9EtTAhUeUi_tL4RJQ';
-					var map = L.mapbox.map('map', 'mapbox.streets', {zoomControl: false})
-						.setView([37.5, -120], 6);//33.40, -118.20
+
+					var map = L.mapbox.map('map', 'mapbox.streets', {zoomControl: false}).setView([37.5, -120], 6); // 33.40, -118.20 -> (other view tried from last semester)
 
 						// Disable drag and zoom handlers.
 						map.dragging.disable();
@@ -49,6 +48,7 @@
 						// Disable tap handler, if present.
 						if (map.tap) map.tap.disable();
 				</script>
+
 			</div>
 
 			<div id="navBar">
@@ -117,17 +117,18 @@
 
 		</div>
 
+
 		<script>
+			// start javascript
+
+			// constants
 			const HOURLY = 3600000;
 			const DAILY = 86400000;
 			const WEEKLY = 604800000;
 			const MONTHLY = 2628000000;
 
-
-
-			// Setup our svg layer that we can manipulate with d3
-			var svg = d3.select(map.getPanes().overlayPane)
-			  .append("svg");
+			// Setup svg layer that we can manipulate with d3
+			var svg = d3.select(map.getPanes().overlayPane).append("svg");
 
 			var bounds = map.getBounds();
 			var topLeft = map.latLngToLayerPoint(bounds.getNorthWest())
@@ -140,36 +141,38 @@
 			//Global variables---------------------------------------------------
 			var allDetections = []; //instead of storing all detection, store server response.
 			var circles;
+
 			//-----------------------------------------------------------------------
-			//Event listener for the generate/clear button
+
+			// Event listener for the generate/clear button in the track menu
 			$("#generate").click(function() {
-				$(this).text(function(i, v){
-					if(v === "Generate")
-					{
+				$(this).text(function(i, v) {
+					// button text == Generate
+					if(v === "Generate") {
+						// verify all required fields in track menu are filled out
 						if($("#speciesSlct option:selected").val() === "" || $("#startdate").val() === "" || $("#enddate").val() === "" || ($('input[type=radio]:checked').size() > 0) === false){
 							alert("Please fill out all fields.");
 						}
-
-						else
-						{
-
+						else {
+							// get start and end date from date pickers
 							var startDate = new Date($("#startdate").val().concat("T00:00:00"));
 							var endDate = new Date($("#enddate").val().concat("T00:00:00"));
 
 							$("#play").prop('disabled', false);
 
-							var p1 = new Promise(function(resolve, reject){
+							// promise represents a value that may be available now, in the future or never
+							var p1 = new Promise(function(resolve, reject) {
 								var timeUnit = getTimeUnit();
-								if(timeUnit >= 0 && timeUnit <= 3)
-								{
+								if(timeUnit >= 0 && timeUnit <= 3) {
 									resolve(timeUnit);
 								}
-								else
-								{
+								else {
 									reject(-1);
 								}
 							});
-							p1.then(function(value){
+
+							// uses promise object and value, value == timeUnits
+							p1.then(function(value) {
 								var dots = getDots(startDate, endDate, value);
 								if(dots.length === 0) {
 									$("#start").prop('disabled', true);
@@ -178,23 +181,20 @@
 									return dots;
 								}
 								return dots;
-							}).then(function(value){
-								if(value.length === 0)
-								{
+							}).then(function(value) { // uses return value of above function, value == dots
+								if(value.length === 0) {
 									return value;
 								}
-								else{
+								else {
 									var sliderSteps = getSliderSteps(value);
 									setSliderSteps(sliderSteps);
 									return fitToScreen(value);
 								}
-							}).then(function(value){
-								if(value.length === 0)
-								{
+							}).then(function(value) {
+								if(value.length === 0) {
 									$("#generate").text("Generate");
 								}
-								else
-								{
+								else {
 									var timeUnit = getTimeUnit();
 									$("#generate").text("Clear");
 									setTimeout(function(){ initDetections(value, timeUnit); }, 300);
@@ -203,11 +203,12 @@
 							$("#trackMenu").toggle("slow");
 						}
 					}
-					else if(v === "Clear")
-					{
+					// button text == Clear
+					// reset UI, clear text, clear detection dots from map
+					else if(v === "Clear") {
 						$("#play").text("Play");
 						d3.select("#play").on("click", function() {
-							clearInterval (myTimer);
+							clearInterval(myTimer);
 						});
 						$("#play").prop('disabled', true);
 						$("#rangeSlider").val("0");
@@ -228,11 +229,18 @@
 				});
 			});
 
+			/* Gets the number of steps for the slider
+			* @param dots, array of user desired detections
+			* @return size of dots array
+			*/
 			function getSliderSteps(dots)
 			{
 				return dots[dots.length-1].tm;
 			}
 
+			/* Sets the number of steps for the slider
+			* @param steps, number of steps to use for slider
+			*/
 			function setSliderSteps(steps)
 			{
 				$('#rangeSlider').prop({
@@ -241,54 +249,52 @@
 				});
 			}
 
-
+			/* Gets the time unit selected by user from track menu radio buttons
+			*		(hourly, daily, weekly, monthly)
+			* @return the index of the selected button
+			*/
 			function getTimeUnit()
 			{
 				var selection = document.getElementsByName("radioButton");
 				var timeUnit = 0;
-				for(var i = selection.length; i--;)
-				{
-					if(selection[i].checked)
-					{
+				for(var i = selection.length; i--;) {
+					if(selection[i].checked) {
 						timeUnit = selection[i].value;
 					}
 				}
-
 				return Number(timeUnit);
 			}
 
+			/* Imports all data from .csv file with the detections data
+			* @param string, file name
+			* Parse data from .csv file into allDetections array
+			*/
 			d3.csv("JWS_20150914_export.csv", function(err, data) {
-
-				for(i = 0; i < data.length; i++)
-				{
+				for(i = 0; i < data.length; i++) {
 					//use library XDate to help convert date; [0] is needed because otherwise 'date object' is inside an array of object.
 					allDetections[i] = {lat: data[i].Latitude, lng: data[i].Longitude, dateTime: (new XDate (data[i]["Date and Time (UTC)"].replace(/\s+/g, 'T'), true))[0]};
 				}
-				console.log("parsing done");
+				console.log("parsing completed");
 			});
 
 			/*
 			* This function fills the dots array with detections based on the starting date and ending date.
-			* It then adds that data to the circles svg element to create cirlces from that data. The circles
-			* are then displayed and blinked when the user clicks start.
+			* It then adds that data to the circles svg element to create cirlces from that data.
+			* The circles are then displayed and blinked when the user clicks play.
 			*/
-			function initDetections(dots, timeUnit)
-			{
-
+			function initDetections(dots, timeUnit) {
 				//d3
-			circles = svg.selectAll("circle")
+				circles = svg.selectAll("circle")
 						.data(dots)
 						.enter()
 						.append("circle")
 						.attr("cx", function(d)
 						{
-							//if(d.tm === currentStep)
-								return project(d).x;//simply use return project(d).x to display all (no if statement)
+								return project(d).x; // simply use return project(d).x to display all
 						})
 						.attr("cy", function(d)
 						{
-							//if(d.tm === currentStep)
-								return project(d).y;//simply use return project(d).y to display all (no if statement)
+								return project(d).y; // simply use return project(d).y to display all
 						})
 						.style({
 							fill: "#ff1a1a",
@@ -301,29 +307,29 @@
 							return d.dateTime;
 						})
 
-		function dateTag(currentStep)
-		{
-					if(timeUnit === 0)
-					{
+				/* Sets the date tag text (date and hour) based on current step
+				* @param current step, index of dots array that the slider is currently on
+				*/
+				function dateTag(currentStep)
+				{
+					if(timeUnit === 0) {
 						$("#currentHour").text(getSliderHour(dots, currentStep))
 					}
-					else
-					{
+					else {
 						$("#currentDate").text(getSliderDate(dots, currentStep));
 					}
 				}
 
-
-				/*This function adds all the detections to the map with a radius of 2 and blinks
-				* detections based on the current step on the slider.
-				* @param currentStep The step that the slider is currently on.
+				/* Adds all the detections to the map with a radius of 2 and blinks
+				* detections based on the current step on the slider
+				* @param currentStep, index of dots array that the slider is currently on
 				*/
-				function drawDetections(currentStep){
-					//add this to fixed the circle size
+				function drawDetections(currentStep) {
+					// add this to fixed the circle size
 					var max_rad = $(window).height() * 0.15;//dynamcially change base on screen size
 					var maxDetectionCount = Math.max.apply(Math,dots.map(function(o){
 													return o.count;
-												})); //maximum detection at a single location/dot
+												})); // maximum detection at a single location/dot
 
 					circles
 					.attr("cx", function(d)
@@ -344,41 +350,42 @@
 					.attr("r", function(d)
 					{
 						if(d.tm === currentStep)
-							//return d.rad;//simply use return d.rad to display all (no if statement)
+							// return d.rad;//simply use return d.rad to display all (no if statement)
 							return d.count * max_rad / maxDetectionCount;
 						else
 							return 2;
 					})
 				}
 
+				/* play button clicked
+				* 	when play button is clicked:
+				*	draw detections on map and set date tag based on current step in slider
+				*/
 				var myTimer;
 				d3.select("#play").on("click", function() {
-					if(d3.select("#play").text() === "Play")
-					{
-						//console.log(d3.select("#play").text());
-						//d3.select("#play").on("click", function() {
-						 clearInterval (myTimer);
+
+					if (d3.select("#play").text() === "Play") {
+						 clearInterval(myTimer);
 							myTimer = setInterval (function() {
 								var b = d3.select("#rangeSlider");
 								var t = (+b.property("value") + 1) % (+b.property("max") + 1);
-								if (t == 0) { t = +b.property("min"); }
+								if (t == 0) {
+									t = +b.property("min");
+								}
 								b.property("value", t);
 								drawDetections(t);
 								dateTag(t);
 							}, 1000);
-						//});
 						d3.select("#play").text("Pause");
-						//console.log(d3.select("#play").text());
 					}
-					else if(d3.select("#play").text() === "Pause")
-					{
+					else if (d3.select("#play").text() === "Pause") {
 						clearInterval (myTimer);
 						d3.select("#play").text("Play");
 					}
 				});
 
-				/*Listener to display information on the details section when the
-				* user hovers the cursor over a detection.
+				/* Listener to display information on the details section when the
+				* 	user hovers the cursor over a detection
 				*/
 				$(document).ready(function(){
 					$("circle").mouseover(function(){
@@ -389,9 +396,11 @@
 					});
 				});
 
-				//--------------------------------------------------------------------------------------------------------------------------------------------------------
+				/* Displays detection information when hovering over a detection
+				* 	(date, time, lat, long)
+				*/
 				$(function(){
-					$("circle").hover(function(e){
+					$("circle").hover(function(e) {
 						$("#date").text(getDate(d3.select(this).attr("id")));
 						$("#time").text(getTime(d3.select(this).attr("id")));
 						$("#lat").text(getLat(d3.select(this).attr("cx"), d3.select(this).attr("cy")));
@@ -400,14 +409,14 @@
 							.css('top', e.pageY)
 							.css('left', e.pageX)
 							.appendTo("body");
-					}, function(){
+					}, function() {
 						$("#details").hide();
 					});
 				});
 
 			}
 
-			//Cherie starts commenting here. Matt stop.
+			// Cherie starts commenting here. Matt stop.
 
 			/*
 			* This method given the array of dots that
