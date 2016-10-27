@@ -169,7 +169,7 @@
 									reject(-1);
 								}
 							});
-							p1.then(function(value){
+							p1.then(function(value){ //promise calls the then function
 								var dots = getDots(startDate, endDate, value);
 								if(dots.length === 0) {
 									$("#start").prop('disabled', true);
@@ -191,7 +191,7 @@
 							}).then(function(value){
 								if(value.length === 0)
 								{
-									$("#generate").text("Generate");
+									$("#generate").text("Generate"); //calling jquery
 								}
 								else
 								{
@@ -685,7 +685,7 @@
 							var newDot = true;
 							for(i=uniqueDotsInTm; i > 0; i--) {
 								if(allDetections[traversalIndex].lat === dots[dots.length-i].lat && allDetections[traversalIndex].lng === dots[dots.length-i].lng) {
-									dots[dots.length-i].count += 1;
+									dots[dots.length-i].count += 1; //count stores numbers?
 									newDot = false;
 								}
 							}
