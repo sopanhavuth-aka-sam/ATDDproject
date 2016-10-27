@@ -322,7 +322,7 @@
 					//add this to fixed the circle size
 					var max_rad = $(window).height() * 0.15;//dynamcially change base on screen size
 					var maxDetectionCount = Math.max.apply(Math,dots.map(function(o){
-													return o.count;
+													return o.count; //wtf is .count....
 												})); //maximum detection at a single location/dot
 
 					circles
@@ -779,7 +779,7 @@
 						if(allDetections[traversalIndex].lat === dots[dots.length-1].lat && allDetections[traversalIndex].lng === dots[dots.length-1].lng
 							&& timeMeasurement === dots[dots.length-1].tm)
 						{
-							dots[dots.length-1].count += 1;
+							dots[dots.length-1].count += 1; //should take out all the .count to objs.
 							traversalIndex++;
 						}
 						else
@@ -809,6 +809,7 @@
 				return dots;
 			}
 
+			//$ is jquery
 			//Might not need this
 			//filering data base on userInput(dates)
 		//	function dateFilter(data, start_date, end_date) {
@@ -824,14 +825,20 @@
 		//		return newData;
 		//	}//end: dateFilter()
 
+			/*
+			 * I am guessing this funciton will take out all of the data that is 0?
+			 * So that you dont have a time on the map where it wont display any detections.
+			 * To fix you could also have not let the use pick dates that don't have detections...
+			 * .count useage starts at 325 before matt pushes his commits.
+			*/
 			function removeZeroCountDot(dots) {
-				var noZeroDots = [];
-				for( i=0; i < dots.length; i++) {
-					if (dots[i].count > 0) {
-						noZeroDots.push(dots[i]);
-					}
-				}
-				return noZeroDots;
+				var noZeroDots = []; //making an array to return and put things that arent 0.
+				for( i=0; i < dots.length; i++) { //for all the dot in dots.
+					if (dots[i].count > 0) { //if the number of array.count is greater than 0
+						noZeroDots.push(dots[i]); //put this dot in the nozerodots array
+					} //count is a obj.count thing counts enumerable properies on the obj.
+				} //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/count
+				return noZeroDots; //return array of dots that are not dot.count == 0.
 			}
 		</script>
 
