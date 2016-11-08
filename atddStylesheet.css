@@ -1,30 +1,44 @@
 .container{
-	position: absolute;
+	position: relative;
 	background-color: #f2f2f2;
-	overflow: hidden;
+
+	width: 100%;
+	height: 100%;
+
 	top: 0;
 	right: 0;
 	bottom: 0;
 	left: 0;
 }
 
-.initiallyHidden{
-	display: none;
+#map {
+	position: absolute;
+	right: 0;
+	top: 7%;
+
+	width: 75%;
+	height: 93%;
 }
-	
-#map { 
-	position:absolute; 
-	top: 7%; 
-	bottom:0;
-	width: 100%;
+
+#trackMenu{
+	position: absolute;
+	left: 0;
+	top: 7%;
+
+	width: 25%;
+	height: 93%;
+	background: #ffffff;
 }
 
 #navBar{
-	position: fixed;
+	position: absolute;
 	background-color: #ffffff;
+
 	top: 0;
+
 	width: 100%;
 	height: 7%;
+
 	display: flex;
 	justify-content: space-between;
 }
@@ -55,16 +69,6 @@
 	color: black;
 }
 
-#trackMenu{
-	position: relative;
-	top: 7%;
-	width: 35%;
-	height: 94%;
-	background: #ffffff;
-	border: 3px solid #e6e6e6;
-
-}
-
 #detailsMenu{
 	position: absolute;
 	top: 7%;
@@ -78,7 +82,7 @@
 
 
 #radioContainer label{
-	display: inline-block;	
+	display: inline-block;
     width:20%;
     background-color:#EFEFEF;
     border-radius:4px;
@@ -103,7 +107,7 @@
     color:#F7F7F7;
 }
 
-#myTable{
+#menuList{
 	display: table;
 	table-layout: fixed;
 	width: 75%;
@@ -112,10 +116,10 @@
 
 #sliderBox
 {
-	position: absolute;	
+	position: absolute;
 	height: 48px;
 	width: 183px;
-	right: 1%; 
+	right: 1%;
 	top: 8%;
 	border-radius: 2px;
 	border: 2px solid #e6e6e6;

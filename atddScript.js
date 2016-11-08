@@ -4,15 +4,15 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 	$("#enddate").Zebra_DatePicker({direction: false, direction: 1, offset:[-190, 285]});
-});	
+});
 
 $(document).ready(function(){
-	$("#trackButton").click(function(){
-		$("#trackMenu").toggle("slow");
-	});
-	
+	// $("#trackButton").click(function(){
+	// 	$("#trackMenu").toggle("slow");
+	// });
+
 	$("#detailsButton").click(function(){
-		var url = "https://github.com/sopanhavuth-aka-sam/ATDDproject/blob/miguel/UserGuide.txt";
+		var url = "https://github.com/sopanhavuth-aka-sam/ATDDproject/blob/master/UserGuide.html";
 		window.open(url, "_blank");
 	});
 });
@@ -27,14 +27,14 @@ var speciesPromise = new Promise(function(resolve, reject){
 		}
 		else {
 			reject("Parsing Specices Fail");
-		}		
-	});	
+		}
+	});
 });
 
 speciesPromise.then(
 	function(dataset) {
-		var speciesOptions = []; 
-		
+		var speciesOptions = [];
+
 		for(i = 0; i < dataset.length; i++){
 			speciesOptions[i] = {id: i, text: dataset[i].species_name};
 		}
@@ -42,15 +42,15 @@ speciesPromise.then(
 			$("#speciesSlct").select2({
 			placeholder: "Select Species.",
 			allowClear: true,
-			data: speciesOptions, 
+			data: speciesOptions,
 			});
-			
+
 			//DISPLAYING SPECIE INPUT WHEN 'GET VALUE' IS CLICKED                <----------------------------------
 			$(".getValue").click(function() {
 			input_specie= $(".slct1").val();									//SAVING INPUT AS A VALUE TYPE TO input_specie
 			});
-		});	
-		
+		});
+
 		$(document).ready(function() {
 			$("#individualSlct").select2({
 			placeholder: "Select Individual.",
@@ -58,7 +58,7 @@ speciesPromise.then(
 			data: speciesOptions,
 			maximumSelectionLength: 3
 			});
-			
+
 			//DISPLAYING INDIVIDUAL INPUT WHEN 'GET VALUE' IS CLICKED                <----------------------------------
 			$(".getValue").click(function() {
 			input_indiv= $(".slct2").val();										//SAVING INPUT AS A VALUE TYPE TO input_indiv
