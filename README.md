@@ -1,3 +1,3 @@
-[![Build Status](https://travis-ci.org/cheriejw/ATDDproject.svg?branch=master)](https://travis-ci.org/cheriejw/ATDDproject)
+[![Build Status](https://travis-ci.org/sopanhavuth-aka-sam/ATDDproject.svg?branch=master)](https://travis-ci.org/sopanhavuth-aka-sam/ATDDproject)
 
 # ATDDproject
