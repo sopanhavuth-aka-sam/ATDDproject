@@ -1,1 +1,12 @@
+sudo: required
 language: java
+notifications:
+	email: false
+install:
+- curl -sL https://deb.nodesouce.com/setup_6.x | sudo -E bash -
+- sudo apt-get install -y nodejs
+- sudo npm install -g mocha chai webdriverjs
+- wget http://selenium-release.storage.googleapis.com/3.0/selenium-server-standalone-3.0.1.jar
+
+script:
+- java -jar selenium-server-standalone-2.44.0.jar

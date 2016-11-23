@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename Java project &apos;SeleniumTestDriver&apos; to &apos;SeleniumHeadlessAutoTesting&apos;&#x0A;- Original element: &apos;SeleniumTestDriver&apos;&#x0A;- Renamed element: &apos;SeleniumTestDriver&apos;&#x0A;- Update references to refactored element" description="Rename Java project &apos;SeleniumTestDriver&apos;" flags="7" id="org.eclipse.jdt.ui.rename.java.project" input="=SeleniumTestDriver" name="SeleniumHeadlessAutoTesting" references="true" stamp="1479249168048" version="1.0"/>
+</session>
