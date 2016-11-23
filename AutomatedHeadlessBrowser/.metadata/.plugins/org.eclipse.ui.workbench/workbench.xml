@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="20" version="2.0">
+<workbench progressCount="11" version="2.0">
 <workbenchAdvisor/>
 <window height="765" maximized="true" width="1006" x="660" y="172">
 <fastViewData fastViewLocation="1024"/>
@@ -20,7 +20,7 @@
 <coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="232" y="30"/>
 <coolItem id="group.editor" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.jdt.ui.ClassFileEditorNoSource" itemType="typePlaceholder" x="-1" y="-1"/>
-<coolItem id="org.eclipse.jdt.ui.CompilationUnitEditor" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="org.eclipse.jdt.ui.CompilationUnitEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
 <coolItem id="group.help" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.help" itemType="typeToolBarContribution" x="-1" y="-1"/>
 </coolbarLayout>
@@ -29,10 +29,26 @@
 <editorArea activeWorkbook="DefaultEditorWorkbook">
 <info part="DefaultEditorWorkbook">
 <folder appearance="1" expanded="2">
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
+<part id="2"/>
+</presentation>
 </folder>
 </info>
 </editorArea>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TestDriver.java" partName="TestDriver.java" path="/home/cheriejw/repositories/ATDDproject/AutomatedHeadlessBrowser/SeleniumHeadlessAutoTesting/src/TestDriver.java" title="TestDriver.java" tooltip="SeleniumHeadlessAutoTesting/src/TestDriver.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/SeleniumHeadlessAutoTesting/src/TestDriver.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="131" selectionOffset="188" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TestDriver2.java" partName="TestDriver2.java" path="/home/cheriejw/repositories/ATDDproject/AutomatedHeadlessBrowser/SeleniumHeadlessAutoTesting/src/TestDriver2.java" title="TestDriver2.java" tooltip="SeleniumHeadlessAutoTesting/src/TestDriver2.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/SeleniumHeadlessAutoTesting/src/TestDriver2.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="87" selectionOffset="103" selectionTopPixel="0"/>
+</editor>
+<editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="PhantomTest.java" partName="PhantomTest.java" path="/home/cheriejw/repositories/ATDDproject/AutomatedHeadlessBrowser/SeleniumHeadlessAutoTesting/src/PhantomTest.java" title="PhantomTest.java" tooltip="SeleniumHeadlessAutoTesting/src/PhantomTest.java" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/SeleniumHeadlessAutoTesting/src/PhantomTest.java"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="88" selectionTopPixel="0"/>
+</editor>
 </editors>
 <views>
 <view id="org.eclipse.jdt.ui.JavadocView" partName="Javadoc">
@@ -40,6 +56,9 @@
 </view>
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
+<expanded>
+<category IMemento.internal.id="Warnings (1 item)"/>
+</expanded>
 <columnWidths org.eclipse.ui.ide.locationField="105" org.eclipse.ui.ide.markerType="236" org.eclipse.ui.ide.pathField="140" org.eclipse.ui.ide.resourceField="105" org.eclipse.ui.ide.severityAndDescriptionField="379"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
@@ -74,7 +93,7 @@
 <viewState CommonNavigator.LINKING_ENABLED="0" org.eclipse.ui.navigator.resources.workingSets.showTopLevelWorkingSets="0"/>
 </view>
 </views>
-<perspectives activePart="org.eclipse.ui.views.ContentOutline" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
+<perspectives activePart="org.eclipse.jdt.ui.CompilationUnitEditor" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.eclipse.ui.internal.ide.application.ResourcePerspective" id="org.eclipse.ui.resourcePerspective" label="Resource"/>
 <alwaysOnActionSet id="org.eclipse.ui.cheatsheets.actionSet"/>
@@ -195,16 +214,19 @@
 <view id="org.eclipse.jdt.junit.ResultView"/>
 <view id="org.eclipse.ui.console.ConsoleView"/>
 <view id="org.eclipse.ui.views.ContentOutline"/>
+<view id="org.eclipse.ui.navigator.ProjectExplorer"/>
 <fastViewBars/>
 <layout>
 <mainWindow>
 <info folder="true" part="left">
-<folder appearance="2" expanded="2">
+<folder activePageID="org.eclipse.ui.navigator.ProjectExplorer" appearance="2" expanded="2">
+<page content="org.eclipse.ui.navigator.ProjectExplorer" label="Project Explorer"/>
 <page content="org.eclipse.jdt.ui.PackageExplorer" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.ui.TypeHierarchy" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
-<page content="org.eclipse.ui.navigator.ProjectExplorer" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+</presentation>
 </folder>
 </info>
 <info folder="true" part="stickyFolderRight" ratio="0.74986464" ratioLeft="1385" ratioRight="462" relationship="2" relative="left">
@@ -216,7 +238,7 @@
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.28286558" ratioLeft="383" ratioRight="971" relationship="2" relative="left"/>
 <info folder="true" part="bottom" ratio="0.6480506" ratioLeft="615" ratioRight="334" relationship="4" relative="org.eclipse.ui.editorss">
-<folder activePageID="org.eclipse.jdt.junit.ResultView" appearance="2" expanded="2">
+<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
 <page content="org.eclipse.jdt.ui.JavadocView" label="Javadoc"/>
 <page content="org.eclipse.jdt.ui.SourceView" label="Declaration"/>
@@ -249,7 +271,58 @@
 </perspective>
 </perspectives>
 <workingSets/>
-<navigationHistory/>
+<navigationHistory>
+<editors>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/SeleniumHeadlessAutoTesting/src/TestDriver2.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/SeleniumHeadlessAutoTesting/src/TestDriver.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/SeleniumHeadlessAutoTesting/src/PhantomTest.java"/>
+</editors>
+<item historyLabel="TestDriver2.java" index="0">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="TestDriver.java" index="1">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="TestDriver.java" index="1">
+<position info="not_deleted" x="666" y="0"/>
+</item>
+<item historyLabel="TestDriver2.java" index="0">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="TestDriver.java" index="1">
+<position info="not_deleted" x="188" y="131"/>
+</item>
+<item historyLabel="TestDriver2.java" index="0">
+<position info="not_deleted" x="429" y="0"/>
+</item>
+<item historyLabel="TestDriver.java" index="1">
+<position info="not_deleted" x="188" y="131"/>
+</item>
+<item historyLabel="TestDriver2.java" index="0">
+<position info="not_deleted" x="429" y="0"/>
+</item>
+<item historyLabel="TestDriver2.java" index="0">
+<position/>
+</item>
+<item historyLabel="TestDriver2.java" index="0">
+<position info="not_deleted" x="964" y="0"/>
+</item>
+<item historyLabel="PhantomTest.java" index="2">
+<position info="not_deleted" x="88" y="0"/>
+</item>
+<item historyLabel="TestDriver2.java" index="0">
+<position info="not_deleted" x="964" y="0"/>
+</item>
+<item historyLabel="PhantomTest.java" index="2">
+<position info="not_deleted" x="88" y="0"/>
+</item>
+<item historyLabel="TestDriver2.java" index="0">
+<position info="not_deleted" x="103" y="87"/>
+</item>
+<item active="true" historyLabel="PhantomTest.java" index="2">
+<position info="not_deleted" x="88" y="0"/>
+</item>
+</navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
 </page>
 <workbenchWindowAdvisor/>
@@ -266,6 +339,15 @@
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="PhantomTest.java" tooltip="SeleniumHeadlessAutoTesting/src/PhantomTest.java">
+<persistable path="/SeleniumHeadlessAutoTesting/src/PhantomTest.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TestDriver2.java" tooltip="SeleniumHeadlessAutoTesting/src/TestDriver2.java">
+<persistable path="/SeleniumHeadlessAutoTesting/src/TestDriver2.java"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TestDriver.java" tooltip="SeleniumHeadlessAutoTesting/src/TestDriver.java">
+<persistable path="/SeleniumHeadlessAutoTesting/src/TestDriver.java"/>
+</file>
 <file factoryID="org.eclipse.jdt.ui.ClassFileEditorInputFactory" id="org.eclipse.jdt.ui.ClassFileEditorNoSource" name="Preconditions.class" tooltip="com.google.common.base.Preconditions">
 <persistable org.eclipse.jdt.ui.ClassFileIdentifier="=SeleniumHeadlessAutoTesting/\/home\/cheriejw\/repositories\/ATDDproject\/AutomatedHeadlessBrowser\/selenium\/selenium\/selenium-server-standalone-2.44.0.jar&lt;com.google.common.base(Preconditions.class"/>
 </file>
