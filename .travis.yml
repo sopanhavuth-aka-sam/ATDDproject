@@ -1,7 +1,7 @@
 sudo: required
 language: node_js
-notifications:
-	email: false
+notifications: 
+  email: false
 install:
 - curl -sL https://deb.nodesouce.com/setup_6.x | sudo -E bash -
 - sudo apt-get install -y nodejs
