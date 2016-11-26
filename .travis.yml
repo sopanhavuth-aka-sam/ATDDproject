@@ -2,11 +2,20 @@ sudo: required
 language: node_js
 notifications: 
   email: false
+before_install:
+- sudo add-apt-repository -y ppa:webupd8team/java
+- sudo apt-get update
+
+
 install:
 - curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 - sudo apt-get install -y nodejs
 - sudo npm install -g mocha chai webdriverjs
 - wget http://selenium-release.storage.googleapis.com/3.0/selenium-server-standalone-3.0.1.jar
+- sudo apt-get install -y python-software-properties debconf-utils
+- echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
+- sudo apt-get install -y oracle-java8-installer
+
 
 script:
 - java -jar selenium-server-standalone-3.0.1.jar
