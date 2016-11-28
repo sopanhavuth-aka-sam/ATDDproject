@@ -51,3 +51,6 @@ local.properties
 
 #Vagrant
 .vagrant
+
+#Other unwanted things
+.metadata

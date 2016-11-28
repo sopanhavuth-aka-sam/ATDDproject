@@ -10,7 +10,7 @@ before_install:
 install:
 - curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 - sudo apt-get install -y nodejs
-- sudo npm install -g mocha chai webdriverjs
+- sudo npm install -g mocha chai webdriverjs phantomjs
 - wget http://selenium-release.storage.googleapis.com/3.0/selenium-server-standalone-3.0.1.jar
 - sudo apt-get install -y python-software-properties debconf-utils
 - echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections

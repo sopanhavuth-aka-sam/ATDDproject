@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="11" version="2.0">
+<workbench progressCount="17" version="2.0">
 <workbenchAdvisor/>
-<window height="765" maximized="true" width="1006" x="660" y="172">
+<window height="736" maximized="true" width="1000" x="429" y="147">
 <fastViewData fastViewLocation="1024"/>
 <perspectiveBar>
 <itemSize x="160"/>
@@ -32,22 +32,17 @@
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
 <part id="0"/>
 <part id="1"/>
-<part id="2"/>
 </presentation>
 </folder>
 </info>
 </editorArea>
 <editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TestDriver.java" partName="TestDriver.java" path="/home/cheriejw/repositories/ATDDproject/AutomatedHeadlessBrowser/SeleniumHeadlessAutoTesting/src/TestDriver.java" title="TestDriver.java" tooltip="SeleniumHeadlessAutoTesting/src/TestDriver.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/SeleniumHeadlessAutoTesting/src/TestDriver.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="131" selectionOffset="188" selectionTopPixel="0"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="581" selectionTopPixel="0"/>
 </editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TestDriver2.java" partName="TestDriver2.java" path="/home/cheriejw/repositories/ATDDproject/AutomatedHeadlessBrowser/SeleniumHeadlessAutoTesting/src/TestDriver2.java" title="TestDriver2.java" tooltip="SeleniumHeadlessAutoTesting/src/TestDriver2.java" workbook="DefaultEditorWorkbook">
+<editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="TestDriver2.java" partName="TestDriver2.java" path="/home/cheriejw/repositories/ATDDproject/AutomatedHeadlessBrowser/SeleniumHeadlessAutoTesting/src/TestDriver2.java" title="TestDriver2.java" tooltip="SeleniumHeadlessAutoTesting/src/TestDriver2.java" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/SeleniumHeadlessAutoTesting/src/TestDriver2.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="87" selectionOffset="103" selectionTopPixel="0"/>
-</editor>
-<editor activePart="true" focus="true" id="org.eclipse.jdt.ui.CompilationUnitEditor" name="PhantomTest.java" partName="PhantomTest.java" path="/home/cheriejw/repositories/ATDDproject/AutomatedHeadlessBrowser/SeleniumHeadlessAutoTesting/src/PhantomTest.java" title="PhantomTest.java" tooltip="SeleniumHeadlessAutoTesting/src/PhantomTest.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/SeleniumHeadlessAutoTesting/src/PhantomTest.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="88" selectionTopPixel="0"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="216" selectionTopPixel="0"/>
 </editor>
 </editors>
 <views>
@@ -56,9 +51,6 @@
 </view>
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
-<expanded>
-<category IMemento.internal.id="Warnings (1 item)"/>
-</expanded>
 <columnWidths org.eclipse.ui.ide.locationField="105" org.eclipse.ui.ide.markerType="236" org.eclipse.ui.ide.pathField="140" org.eclipse.ui.ide.resourceField="105" org.eclipse.ui.ide.severityAndDescriptionField="379"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
@@ -276,6 +268,8 @@
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/SeleniumHeadlessAutoTesting/src/TestDriver2.java"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/SeleniumHeadlessAutoTesting/src/TestDriver.java"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/SeleniumHeadlessAutoTesting/src/PhantomTest.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/SeleniumHeadlessAutoTesting/src/TestDriver2.java"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/SeleniumHeadlessAutoTesting/src/TestDriver.java"/>
 </editors>
 <item historyLabel="TestDriver2.java" index="0">
 <position info="not_deleted" x="0" y="0"/>
@@ -319,8 +313,23 @@
 <item historyLabel="TestDriver2.java" index="0">
 <position info="not_deleted" x="103" y="87"/>
 </item>
-<item active="true" historyLabel="PhantomTest.java" index="2">
+<item historyLabel="PhantomTest.java" index="2">
 <position info="not_deleted" x="88" y="0"/>
+</item>
+<item historyLabel="TestDriver2.java" index="3">
+<position info="not_deleted" x="103" y="87"/>
+</item>
+<item historyLabel="TestDriver.java" index="4">
+<position info="not_deleted" x="581" y="0"/>
+</item>
+<item historyLabel="TestDriver2.java" index="3">
+<position info="not_deleted" x="216" y="0"/>
+</item>
+<item historyLabel="PhantomTest.java" index="2">
+<position info="not_deleted" x="119" y="0"/>
+</item>
+<item active="true" historyLabel="TestDriver2.java" index="3">
+<position info="not_deleted" x="216" y="0"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
