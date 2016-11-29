@@ -25,16 +25,16 @@
 
 		<script src="xdate.js"></script>
 
-		<!-- All of the funcitons required to getDetections. -->
-		<script type='text/javascript' src='getDetections.js'></script>
+		<!-- All of the funcitons that start with get. -->
+		<script type='text/javascript' src='accessors.js'></script>
+
+		<!-- All of the funcitons that do with slider. -->
+		<script type='text/javascript' src='slider.js'></script>
 	</head>
 
 	<body>
-
 		<div class = "container">
-
 			<div id = "map">
-
 				<script>
 					L.mapbox.accessToken = 'pk.eyJ1IjoibWdsbW9udGVzIiwiYSI6ImNpbDhsZDV1YjBkNHd1MG0wd3Q3MnZpZmkifQ.6JR0V9EtTAhUeUi_tL4RJQ';
 
@@ -50,7 +50,6 @@
 						// Disable tap handler, if present.
 						if (map.tap) map.tap.disable();
 				</script>
-
 			</div>
 
 			<div id="navBar">
@@ -224,42 +223,6 @@
 				});
 			});
 
-			/* Gets the number of steps for the slider
-			* @param dots, array of user desired detections
-			* @return size of dots array
-			*/
-			function getSliderSteps(dots)
-			{
-				return dots[dots.length-1].tm;
-			}
-
-			/* Sets the number of steps for the slider
-			* @param steps, number of steps to use for slider
-			*/
-			function setSliderSteps(steps)
-			{
-				$('#rangeSlider').prop({
-					'min': 0,
-					'max': steps
-				});
-			}
-
-			/* Gets the time unit selected by user from track menu radio buttons
-			*		(hourly, daily, weekly, monthly)
-			* @return the index of the selected button
-			*/
-			function getTimeUnit()
-			{
-				var selection = document.getElementsByName("radioButton");
-				var timeUnit = 0;
-				for(var i = selection.length; i--;) {
-					if(selection[i].checked) {
-						timeUnit = selection[i].value;
-					}
-				}
-				return Number(timeUnit);
-			}
-
 			/* Imports all data from .csv file with the detections data
 			* @param string, file name
 			* Parse data from .csv file into allDetections array
@@ -276,6 +239,7 @@
 			* This function fills the dots array with detections based on the starting date and ending date.
 			* It then adds that data to the circles svg element to create cirlces from that data.
 			* The circles are then displayed and blinked when the user clicks play.
+			* Has functions in it.
 			*/
 			function initDetections(dots, timeUnit) {
 				//d3
@@ -301,56 +265,6 @@
 						.attr("id", function(d){
 							return d.dateTime;
 						})
-
-				/* Sets the date tag text (date and hour) based on current step
-				* @param current step, index of dots array that the slider is currently on
-				*/
-				function dateTag(currentStep)
-				{
-					if(timeUnit === 0) {
-						$("#currentHour").text(getSliderHour(dots, currentStep))
-					}
-					else {
-						$("#currentDate").text(getSliderDate(dots, currentStep));
-					}
-				}
-
-				/* Adds all the detections to the map with a radius of 2 and blinks
-				* detections based on the current step on the slider
-				* @param currentStep, index of dots array that the slider is currently on
-				*/
-				function drawDetections(currentStep) {
-					// add this to fixed the circle size
-					var max_rad = $(window).height() * 0.15;//dynamcially change base on screen size
-					var maxDetectionCount = Math.max.apply(Math,dots.map(function(o){
-													return o.count;
-												})); // maximum detection at a single location/dot
-
-					circles
-					.attr("cx", function(d)
-					{
-						return project(d).x;
-					})
-					.attr("cy", function(d)
-					{
-						return project(d).y;
-					})
-					.style({
-						fill: "#ff1a1a",
-						"fill-opacity": 0.6,
-						stroke: "#004d60",
-						"stroke-width": 1
-					})
-					.transition().duration(500)
-					.attr("r", function(d)
-					{
-						if(d.tm === currentStep)
-							// return d.rad;//simply use return d.rad to display all (no if statement)
-							return d.count * max_rad / maxDetectionCount;
-						else
-							return 2;
-					})
-				}
 
 				/* play button clicked
 				* 	when play button is clicked:
@@ -408,49 +322,56 @@
 						$("#details").hide();
 					});
 				});
-
 			}
 
-			// Cherie starts commenting here. Matt stop.
-
-			/*
-			* This method given the array of dots that
-			* currentStep is the index. A portion of the play line.
-			* /@param: dots is the array that has the user's queryed dots in it.
-			* Used at the dot if you hover over it displays the Date, location, time of detection.
+			/* Sets the date tag text (date and hour) based on current step
+			* @param current step, index of dots array that the slider is currently on
 			*/
-			function getSliderDate(dots, currentStep)
+			function dateTag(currentStep)
 			{
-				var day = dots[currentStep].dateTime.getDate();
-				var month = dots[currentStep].dateTime.getMonth() + 1;
-				var year = dots[currentStep].dateTime.getFullYear();
-				var date = "Date:" + month.toString() + "/" + day.toString() + "/" + year.toString();
-				return date;
+				if(timeUnit === 0) {
+					$("#currentHour").text(getSliderHour(dots, currentStep))
+				}
+				else {
+					$("#currentDate").text(getSliderDate(dots, currentStep));
+				}
 			}
 
-			/*Called from DateTag.
-				Displayed on the top corner right.
-				@return: It returns the string that it will display in the small box in the top right
-					corner of the play box(made with js and css).
+			/* Adds all the detections to the map with a radius of 2 and blinks
+			* detections based on the current step on the slider
+			* @param currentStep, index of dots array that the slider is currently on
 			*/
+			function drawDetections(currentStep) {
+				// add this to fixed the circle size
+				var max_rad = $(window).height() * 0.15;//dynamcially change base on screen size
+				var maxDetectionCount = Math.max.apply(Math,dots.map(function(o){
+												return o.count;
+											})); // maximum detection at a single location/dot
 
-			function getSliderHour(dots, currentStep)
-			{
-				var hour = dots[currentStep].dateTime.getHours();
-				var time = "";
-				if (hour == 0 || hour == 24)
+				circles
+				.attr("cx", function(d)
 				{
-					time = "Time:12:00 am."
-				}
-				else if(hour <= 12)
+					return project(d).x;
+				})
+				.attr("cy", function(d)
 				{
-					time = "Time:" + hour + ":00 am."
-				}
-				else if(hour > 12)
+					return project(d).y;
+				})
+				.style({
+					fill: "#ff1a1a",
+					"fill-opacity": 0.6,
+					stroke: "#004d60",
+					"stroke-width": 1
+				})
+				.transition().duration(500)
+				.attr("r", function(d)
 				{
-					time = "Time:" + hour%12 + ":00 pm."
-				}
-				return time;
+					if(d.tm === currentStep)
+						// return d.rad;//simply use return d.rad to display all (no if statement)
+						return d.count * max_rad / maxDetectionCount;
+					else
+						return 2;
+				})
 			}
 
 			/* This function resizes the screen based on the detections.
@@ -462,49 +383,6 @@
 				return dots;
 			}
 
-			/*This functions gets the latitude of a detection.
-			*@param x This is the x coordinate of the detection.
-			*@param y This is the y coordiante of the detection.
-			*@return num This returns the latitude of the point on the map.
-			*/
-			function getLat(x, y)
-			{
-				var point = map.containerPointToLatLng(L.point(x,y));
-				return point.lat.toFixed(5);
-			}
-
-			/*This functions gets the longitude of a detection.
-			*@param x This is the x coordinate of the detection.
-			*@param y This is the y coordiante of the detection.
-			*@return num This returns the longitude of the point on the map.
-			*/
-			function getLng(x, y)
-			{
-				var point = map.containerPointToLatLng(L.point(x,y));
-				return point.lng.toFixed(5);
-			}
-
-			/*This fuction gets the date of a detection.
-			* @param date The date object from a detection as a string.
-			* @return string This returns the date of the detection as a string.
-			*/
-			function getDate(date)
-			{
-				var parse = date.split(" ", 4);
-				var fixedDate = parse[0] +  parse[2] + " " + parse[1] + " " + parse[3] + " ";
-				return fixedDate;
-			}
-
-			/*This fuction gets the time of a detection.
-			* @param date The date object from a detection as a string.
-			* @return string This returns the time of the detection as a string.
-			*/
-			function getTime(date)
-			{
-				var parse = date.split(" ", 5);
-				var fixedTime = parse[4];
-				return fixedTime;
-			}
 			/* This function clears all the user inputs and removes the
 			*  detections from the map.
 			*/
@@ -527,94 +405,9 @@
 				var point = map.latLngToLayerPoint(L.latLng(ll))
 				return point;
 			}
-
-			/*This fuction determines the index on which to start getting detections from the
-			* allDetections array to fill the dots array.
-			* @param allDetections The array containing all the detections from the csv file.
-			* @param startDate The starting date that the user entered.
-			* @return num The index on which to start adding detections to dots.
-			*/
-			function getStartingIndex(allDetections, startDate)
-			{
-				var startIndex = -1;
-				//determine starting index (for the allDetections array) based on startDate
-				for(i = 0; i < allDetections.length; i++)
-				{
-					if(allDetections[i].dateTime.getTime() >= startDate.getTime())
-					{
-						startIndex = i;
-						break;
-					}
-				}
-				return startIndex;
-			}
-
-			/*This fuction determines the index on which to stop getting detections from the
-			* allDetections array to fill the dots array.
-			* @param allDetections The array containing all the detections from the csv file.
-			* @param endDate The ending date that the user entered.
-			* @return num The index on which to stop adding detections to dots.
-			*/
-			function getEndingIndex(allDetections, endDate)
-			{
-				var endIndex = 0;
-				//Determine ending index (for the allDetections array) based on endDate
-				for(i = 0; i < allDetections.length; i++)
-				{
-					if(allDetections[i].dateTime.getTime() > endDate.getTime())
-					{
-						endIndex = i - 1;
-						break;
-					}
-				}
-				return endIndex;
-			}
-
-			/*This fuction determines how dots is to be filled based on the user
-			* time unit selection.
-			* @param startIndex The index on which to start adding detections from the allDetections array.
-			* @param endIndex The index on which to stop adding detections from the alldDetections array.
-			* @param timeUnit The time unit that the user has selected.
-			* @return array This returns the detections to be displayed based on a unit of time in an array called dots
-			*/
-			function getDots(startDate, endDate, timeUnit)//timeUnit is based on user input, hourly, daily, etc.
-			{
-				var startIndex = getStartingIndex(allDetections, startDate);
-				var endIndex = getEndingIndex(allDetections, endDate);
-
-				//console.log(startIndex + "  " + endIndex); //DEBUGGING
-				//console.log(startDate + " " + endDate); //DEBUGGING
-				var dots = [];
-
-				if(startIndex === -1) {
-					return dots;
-				}
-
-				switch(timeUnit)
-				{
-					case 0:
-						//const HOURLY = 3600000;
-						dots = getDetections(startIndex, endIndex, 3600000);
-						break;
-					case 1:
-						//const DAILY = 86400000;
-						dots = getDetections(startIndex, endIndex, 86400000);
-						break;
-					case 2:
-						//const WEEKLY = 604800000;
-						dots = getDetections(startIndex, endIndex, 604800000);
-						break;
-					case 3:
-						//const MONTHLY = 2628000000;
-						dots = getDetections(startIndex, endIndex, 2628000000);
-						break;
-				}
-				return dots;
-			}
-
 			
-			//Might not need this
-			//filering data base on userInput(dates)
+		//Might not need this
+		//filering data base on userInput(dates)
 		//	function dateFilter(data, start_date, end_date) {
 		//
 		//		var newData = [];
@@ -628,15 +421,15 @@
 		//		return newData;
 		//	}//end: dateFilter()
 
-			function removeZeroCountDot(dots) {
-				var noZeroDots = [];
-				for( i=0; i < dots.length; i++) {
-					if (dots[i].count > 0) {
-						noZeroDots.push(dots[i]);
-					}
-				}
-				return noZeroDots;
-			}
+		// function removeZeroCountDot(dots) {
+		// 	var noZeroDots = [];
+		// 	for( i=0; i < dots.length; i++) {
+		// 		if (dots[i].count > 0) {
+		// 			noZeroDots.push(dots[i]);
+		// 		}
+		// 	}
+		// 	return noZeroDots;
+		// }
 		</script>
 
 	</body>
