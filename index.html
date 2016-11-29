@@ -160,10 +160,38 @@
 						else
 						{
 							process();
-							var startDate = new Date($("#startdate").val().concat("T00:00:00"));
-							var endDate = new Date($("#enddate").val().concat("T00:00:00"));
+								////////////////////////////////////////////////////////////////////////////////////
+								// setTimeout(function(){
+								// 	for(i = 0; i < response.length; i++)
+								// 	{
+								// 		//use library XDate to help convert date; [0] is needed because otherwise 'date object' is inside an array of object.
+								// 		allDetections[i] = {lat: response[i].Latitude, lng: response[i].Longitude, dateTime: (new XDate (data[i]["Date and Time (UTC)"].replace(/\s+/g, 'T'), true))[0]};
+								// 	}
+								// }, 2000);
+								// for(i = 0; i < response.length; i++)
+								// {
+								// 	//use library XDate to help convert date; [0] is needed because otherwise 'date object' is inside an array of object.
+								// 	allDetections[i] = {lat: response[i].Latitude, lng: response[i].Longitude, dateTime: (new XDate (data[i]["Date and Time (UTC)"].replace(/\s+/g, 'T'), true))[0]};
+								// }
+								////////////////////////////////////////////////////////////////////////////////////
+
+							//Dont need start and end date with our new implementation
+							// var startDate = new Date($("#startdate").val().concat("T00:00:00"));
+							// var endDate = new Date($("#enddate").val().concat("T00:00:00"));
 
 							$("#play").prop('disabled', false);
+
+							// //Promise for allDetections server request
+							// var p0 = new Promise(function(resolve, reject){
+							// 	process();
+							// 	if(allDetections.length > 0) {
+							// 		console.log(allDetections);
+							// 		resolve(allDetections);
+							// 	}
+							// 	else {
+							// 		reject(-1);
+							// 	}
+							// });
 
 							var p1 = new Promise(function(resolve, reject){
 								var timeUnit = getTimeUnit();
@@ -177,6 +205,7 @@
 								}
 							});
 							p1.then(function(value){
+								console.log(allDetections);
 								var dots = getDots(startDate, endDate, value);
 								if(dots.length === 0) {
 									$("#start").prop('disabled', true);
@@ -236,14 +265,14 @@
 			});//#generate
 
 			//REMOVE: front-end conversion
-			d3.csv("JWS_20150914_export.csv", function(err, data) {
-
-				for(i = 0; i < data.length; i++)
-				{
-					//use library XDate to help convert date; [0] is needed because otherwise 'date object' is inside an array of object.
-					allDetections[i] = {lat: data[i].Latitude, lng: data[i].Longitude, dateTime: (new XDate (data[i]["Date and Time (UTC)"].replace(/\s+/g, 'T'), true))[0]};
-				}
-			});
+			// d3.csv("JWS_20150914_export.csv", function(err, data) {
+			//
+			// 	for(i = 0; i < data.length; i++)
+			// 	{
+			// 		//use library XDate to help convert date; [0] is needed because otherwise 'date object' is inside an array of object.
+			// 		allDetections[i] = {lat: data[i].Latitude, lng: data[i].Longitude, dateTime: (new XDate (data[i]["Date and Time (UTC)"].replace(/\s+/g, 'T'), true))[0]};
+			// 	}
+			// });
 
 			/*
 			* This function fills the dots array with detections based on the starting date and ending date.

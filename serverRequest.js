@@ -45,7 +45,7 @@ function process() {
         @param2 format of the request url
         @param3 true: asychronous, false: non-asychronous (I don't know the significant here)
         */
-        xmlHttp.open("GET", "server.php?StartDate="+ startDate + "&EndDate=" +endDate, true);
+        xmlHttp.open("GET", "server.php?StartDate="+ startDate + "&EndDate=" +endDate, false);
 
         /*When the server response, call handleServerResponse() to handle file
         that was send back from the server*/
@@ -71,8 +71,16 @@ function handleServerResponse() {
     if(xmlHttp.readyState == 4) {
         //status == 200: communication was okay
         if(xmlHttp.status == 200) {
-            //globle variable response of the returned json file
+            //globle variable response of the returned json file (as string formatted json)
             response = xmlHttp.responseText;
+            //convert string-formatted json to actual json
+            json_response = JSON.parse(response);
+            //Initialize addDetections
+            for(i = 0; i < json_response.length; i++)
+            {
+                //use library XDate to help convert date; [0] is needed because otherwise 'date object' is inside an array of object.
+                allDetections[i] = {lat: parseInt(json_response[i].Latitude), lng: parseInt(json_response[i].Longitude), dateTime: (new XDate (json_response[i]["Date_Time"].replace(/\s+/g, 'T'), true))[0]};
+            }
         }
         //if communication fail
         else {

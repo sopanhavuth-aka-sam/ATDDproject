@@ -27,7 +27,7 @@ function displayPopup(){
 }
 
 function popUp(){
-    Cookies.remove('colorboxShown');
+    //Cookies.remove('colorboxShown');
     var popupShown = Cookies.get('colorboxShown');
 
     if(popupShown){
