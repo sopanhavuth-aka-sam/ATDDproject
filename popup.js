@@ -5,19 +5,19 @@ function onPopupOpen(){
 }
 
 function onPopupClose(){
-    var checked;
-    // checked = ($("#colorbox").find('#cbox1')).prop("checked");
-    checked = $("#colorbox").find('#cbox1');
-    console.log(checked);
-    if(checked) {
-        Cookies.set('colorboxShown', 'yes');
-        console.log('cookie set');
-    }
+    // var checked;
+    // // checked = ($("#colorbox").find('#cbox1')).prop("checked");
+    // checked = $("#colorbox").find('#cbox1');
+    // if(checked) {
+    //     Cookies.set('colorboxShown', 'yes');
+    //     console.log('cookie set');
+    // }
 }
 
 function displayPopup(){
   $.colorbox({
     href:"popUpMessage.html",
+    // html:"<h1>Welcome</h1>",
     className: "popUp",
     width: 350,
     height: 250,

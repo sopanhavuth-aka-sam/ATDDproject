@@ -1,8 +1,11 @@
 $(document).ready(function() {
+	$("#startdate").val('');
 	$("#startdate").Zebra_DatePicker({direction: false, pair: $(enddate), offset:[-190, 285]});
+
 });
 
 $(document).ready(function() {
+	$("#enddate").val('');
 	$("#enddate").Zebra_DatePicker({direction: false, direction: 1, offset:[-190, 285]});
 });
 

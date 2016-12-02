@@ -79,7 +79,7 @@ function handleServerResponse() {
             for(i = 0; i < json_response.length; i++)
             {
                 //use library XDate to help convert date; [0] is needed because otherwise 'date object' is inside an array of object.
-                allDetections[i] = {lat: parseInt(json_response[i].Latitude), lng: parseInt(json_response[i].Longitude), dateTime: (new XDate (json_response[i]["Date_Time"].replace(/\s+/g, 'T'), true))[0]};
+                allDetections[i] = {lat: parseFloat(json_response[i].Latitude), lng: parseFloat(json_response[i].Longitude), dateTime: (new XDate (json_response[i]["Date_Time"].replace(/\s+/g, 'T'), true))[0]};
             }
         }
         //if communication fail

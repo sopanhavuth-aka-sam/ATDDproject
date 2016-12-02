@@ -224,32 +224,36 @@ function getEndingIndex(allDetections, endDate)
 * @param timeUnit The time unit that the user has selected.
 * @return array This returns the detections to be displayed based on a unit of time.
 */
-function getDots(startDate, endDate, timeUnit)//timeUnit is based on user input, hourly, daily, etc.
+function getDots(timeUnit)//timeUnit is based on user input, hourly, daily, etc.
 {
-    var startIndex = getStartingIndex(allDetections, startDate);
-    var endIndex = getEndingIndex(allDetections, endDate);
+    // var startIndex = getStartingIndex(allDetections, startDate);
+    // var endIndex = getEndingIndex(allDetections, endDate);
 
     //console.log(startIndex + "  " + endIndex); //DEBUGGING
     //console.log(startDate + " " + endDate); //DEBUGGING
     var dots = [];
 
-    if(startIndex === -1) {
-        return dots;
-    }
+    // if(startIndex === -1) {
+    //     return dots;
+    // }
 
     switch(timeUnit)
     {
         case 0:
-            dots = getHourlyDetections(startIndex, endIndex);
+            // dots = getHourlyDetections(startIndex, endIndex);
+            dots = getHourlyDetections(0, allDetections.length - 1);
             break;
         case 1:
-            dots = getDailyDetections(startIndex, endIndex);
+            // dots = getDailyDetections(startIndex, endIndex);
+            dots = getDailyDetections(0, allDetections.length - 1);
             break;
         case 2:
-            dots = getWeeklyDetections(startIndex, endIndex);
+            // dots = getWeeklyDetections(startIndex, endIndex);
+            dots = getWeeklyDetections(0, allDetections.length - 1);
             break;
         case 3:
-            dots = getMonthlyDetections(startIndex, endIndex);
+            // dots = getMonthlyDetections(startIndex, endIndex);
+            dots = getMonthlyDetections(0, allDetections.length - 1);
             break;
     }
     return dots;
