@@ -1,0 +1,19 @@
+{
+  "name": "ATDD",
+  "description": "A custom element implementation of the Chart.js library",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "seed"
+  ],
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.1.0",
+  },
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#^4.2.2"
+  }
+}
