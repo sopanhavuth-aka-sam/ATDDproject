@@ -1,23 +1,24 @@
-sudo: required
 language: node_js
-notifications: 
-  email: false
-before_install:
-- sudo add-apt-repository -y ppa:webupd8team/java
-- sudo apt-get update
-
-branches: 
-  only:
-    - master
-
-install:
-- curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-- sudo apt-get install -y nodejs
-- sudo npm install -g mocha chai webdriverjs phantomjs
-- wget http://selenium-release.storage.googleapis.com/3.0/selenium-server-standalone-3.0.1.jar
-- sudo apt-get install -y python-software-properties debconf-utils
-- echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
-- sudo apt-get install -y oracle-java8-installer
-
+node_js: stable
+dist: trusty
+sudo: required
+addons:
+  firefox: latest
+  sauce_connect: true
+  apt:
+    sources:
+    - google-chrome
+    packages:
+    - google-chrome-stable
+before_script:
+- npm install -g bower polylint web-component-tester
+- bower install
+- polylint
 script:
-- java -jar selenium-server-standalone-3.0.1.jar
+- xvfb-run wct --skip-plugin sauce
+- if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then wct --skip-plugin local -s 'default';
+  fi
+env:
+  global:
+  - secure: bvM2h2qbxsq/UPfJn/h4w6eoAmnTMNyUgbYZLGMhu9C+lsEq4Qn4Rb1XWe0v1/4IMCVN+xp70LTWcwEN1OjY1FbfvOTmfCtkxTpQWdzqL4kiFurtqCIBkzH1pR0D8JbDOfh9TEUUlvwIqrkDskbmigZRMQqt2Na1Xunjot+uAb8sxoYVu+KhlhWVily4uyGVHwdMVw843ETmU5XB6a0+rrZMAJO+Gpn/XNTxDLTndJQ16qcvFs7ZL42sKA4I01BSIsvb2Spl3jlw0GQFThM8FS1ELbMUwhCcvMEavdJ7cP5GTLIWgvM+himSlh23UexQqSSR/frzmAZv941/V/ZbcHpHXJeUrBm+wh+7uaL05CcG6fF3UnJV+zPvHcVn9P8PB6WkzY93osFJTyQKsXMvBFQVb64jtmI1+8tDi49IFQqIUBrHUL6i4VcVDwBWSYVGQnD+nNagg8n+F+j7c1n77RA9h9bXjI6Jb33OPkTo08Sed7xknHKuvoiwHDurHa9L39LUPntxCn8aGOE9oQxNQgYaDawrRS0nOg4H4S4pPYiw0IlLOuHYHC9IHKstjjB/X0gZq0t80bLzZOgihiKRPpR//17PRgHtr7mCNeUNzVdbSqXggDgW2dnFadxPgmXPgnBPs9mXaS0CaYMHzj5ZQpoDcW110EX1BB9AVFwxXBQ=
+  - secure: WSxQTo83byKU/ck2ysI9uetZgbTfEieseQoAVhk/MM1EzOoZvPDxaaPkumj/uQ30FDHpAqYs7zsHy6gcfhKqCOQI8HhU5V7SqNlGmPP5Xd90FWCKrfJ148qpDq1hkRmfwvxkxhG30E47F0kDDYM4cvqosbwR9udk6u6byXyNlgOy+qNZ/A6qaPXYRdlN1ocZVvkqeJoevVIqmUlKWfVn/E0sX6p/LnzQYqs5N1603/T2ZlnLolOsb9b4W38Ewme2vmJr8rQh86bf2bRcySWRfmvtEHoLf3PnEH1lpUZ9Fm7hv+a96Isj6NC3Q0nI7Z8Yan++r7yyHsegO9kvPVefOgd4Z83wPHNIg9l/IU1/n/llFs3p7fa0KW+3+A8m1R3k1AEvS7QSB2cfv2IW/0zdyg8W9vMfy2bLMoqyo/WeDoKzYJaSMZ1V56KNsUyajrEfMgYT4wNFfDv/ROXCvwZWfshdQyEwLDXUSYApOA1frDWivruuB3t7IpAO3gTwN704IMU3tQbo1npOdz+c0PCwPK5px6cD4AqY5/RxrReSDWTYZ2GiWJwwLNeS7W0oCuGRhDgvX8YOcz6tbVHN1CHdbXPaWKIJlCJKSEoVYD5H6MWrUbZ+kpmPrbQkD0V3CTBM/ahDJlz5AHGyZOjrggc6GUPotzBpe2Q1Sypj0EVHr70=
