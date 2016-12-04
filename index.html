@@ -1,21 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html style="height:100%">
 	<head>
-	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-	<meta content="utf-8" http-equiv="encoding">
+		<!--Setting content encoding and standard-->
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
 
+		<!--Title-->
 		<title>SharkLab ATDD</title>
-
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 
 		<script src="js/jquery-2.2.3.min.js"></script>
 
-		<script type='text/javascript' src='atddScript.js'></script>
-		<link rel='stylesheet' type='text/css' href='atddStylesheet.css'/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 
+		<script src="script.js"></script>
 
-		<script src='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.js'></script>
-		<link href='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.css' rel='stylesheet' />
+		<script type="text/javascript" src="atddScript.js"></script>
+		<link rel="stylesheet" type="text/css" href="stylesheet.css"/>
+
+		<script src="https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.js"></script>
+		<link href="https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.css" rel="stylesheet" />
 
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
@@ -25,32 +28,45 @@
 
 		<script src="xdate.js"></script>
 
-		<!-- All of the funcitons that start with get. -->
-		<script type='text/javascript' src='accessors.js'></script>
+		<!--All of the funcitons that start with get.-->
+		<!--<script type='text/javascript' src='accessors.js'></script>-->
 
 		<!-- All of the funcitons that do with slider. -->
-		<script type='text/javascript' src='slider.js'></script>
-	</head>
+		<!--<script type='text/javascript' src='slider.js'></script>-->
 
-	<body>
+		<!--Make request and handle response from server-->
+		<script src="serverRequest.js"></script>
+
+		<!--Colorbox is used to help popup.js-->
+		<script src="https://cdn.rawgit.com/jackmoore/colorbox/master/jquery.colorbox-min.js"></script>
+		<link rel="stylesheet" href="https://cdn.rawgit.com/jackmoore/colorbox/master/example1/colorbox.css" />
+
+		<!--js-cookie is used to handle cookie for popup.js-->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.3/js.cookie.min.js"></script>
+
+		<!--Control popup behaviour-->
+		<script src="popup.js"></script>
+	</head><!--end header-->
+
+	<body style="height:100%" onload="popUp()">
 		<div class = "container">
+
 			<div id = "map">
 				<script>
+					//initialize map container
 					L.mapbox.accessToken = 'pk.eyJ1IjoibWdsbW9udGVzIiwiYSI6ImNpbDhsZDV1YjBkNHd1MG0wd3Q3MnZpZmkifQ.6JR0V9EtTAhUeUi_tL4RJQ';
-
-					var map = L.mapbox.map('map', 'mapbox.streets', {zoomControl: false}).setView([37.5, -120], 6); // 33.40, -118.20 -> (other view tried from last semester)
-
-						// Disable drag and zoom handlers.
+					var map = L.mapbox.map('map', 'mapbox.streets', {zoomControl: false})
+						.setView([37.5, -120], 6);
+						// Disable drag, keyboard, and zoom handlers.
 						map.dragging.disable();
 						map.touchZoom.disable();
 						map.doubleClickZoom.disable();
 						map.scrollWheelZoom.disable();
 						map.keyboard.disable();
-
 						// Disable tap handler, if present.
 						if (map.tap) map.tap.disable();
 				</script>
-			</div>
+			</div><!--end map div-->
 
 			<div id="navBar">
 				<div id = "trackButton"><h3>Track</h3></div>
@@ -58,20 +74,12 @@
 				<a href="https://www.csulb.edu/natural-sciences-mathematics-biological-sciences/explore/shark-lab"><img src="sharkLabMod.png" alt="sbLogo" id = "logo"></a>
 				<div id = "detailsButton"><h3>User Guide</h3></div>
 				<!--<a href="#" onclick = "window.open(file:///C:/Users/Miguel/Dropbox/CECS491/practice/UserGuide.html">Guide</a>-->
-			</div>
+			</div><!--end navBar div-->
 
-			<div id="trackMenu" class="initiallyHidden">
-
-				<ul id = "myTable">
-
+			<div id="trackMenu">
+				<ul id = "menuList">
 					<li class = "items"><span class = "itemsSpan">
 						<select id="speciesSlct">
-							<option></option>
-						</select>
-					</span></li>
-
-					<li class = "items"><span class = "itemsSpan">
-						<select id="individualSlct">
 							<option></option>
 						</select>
 					</span></li>
@@ -96,12 +104,13 @@
 					<li class = "items"><span class = "itemsSpan">
 						<button	class="button" id = "generate">Generate</button>
 					</span></li>
-				</ul>
 
-			</div>
+				</ul> <!--end menuList-->
+
+			</div> <!--end trackMenu-->
 
 			<div id="sliderBox">
-				<input type='range' step = 1 value='0' id='rangeSlider' disabled />
+				<input type="range" step = "1" value="0" id="rangeSlider" disabled />
 				<button id="play" disabled>Play</button>
 				<div id="dateTag">
 					<code id="currentDate"></code><br>
@@ -114,17 +123,20 @@
 				Time: <code id="time"></code><br>
 				Latitude: <code id="lat"></code><br>
 				Longitude: <code id="lng"></code>
-			</div>
+			</div> <!--end details-->
 
-		</div>
-
+		</div> <!--end container-->
 
 		<script>
-			// start javascript
+			const HOURLY = 3600000;
+			const DAILY = 86400000;
+			const WEEKLY = 604800000;
+			const MONTHLY = 2628000000;
 
-			// Setup svg layer that we can manipulate with d3
-			var svg = d3.select(map.getPanes().overlayPane).append("svg");
-
+			// Setup our svg layer that we can manipulate with d3
+			var svg = d3.select(map.getPanes().overlayPane)
+			  .append("svg");
+			//Setup map layout
 			var bounds = map.getBounds();
 			var topLeft = map.latLngToLayerPoint(bounds.getNorthWest())
 			var bottomRight = map.latLngToLayerPoint(bounds.getSouthEast())
@@ -134,40 +146,40 @@
 				.style("top", topLeft.y + "px");
 
 			//Global variables---------------------------------------------------
-			var allDetections = []; //instead of storing all detection, store server response.
+			var allDetections = [];
+			var detections; //variable to store array that returned from server
 			var circles;
-
 			//-----------------------------------------------------------------------
-			// Event listener for the generate/clear button in the track menu
+			//Event listener for the generate/clear button
 			$("#generate").click(function() {
-				$(this).text(function(i, v) {
-					// button text == Generate
-					if(v === "Generate") {
-						// verify all required fields in track menu are filled out
+				$(this).text(function(i, v){
+					if(v === "Generate")
+					{
 						if($("#speciesSlct option:selected").val() === "" || $("#startdate").val() === "" || $("#enddate").val() === "" || ($('input[type=radio]:checked').size() > 0) === false){
 							alert("Please fill out all fields.");
 						}
-						else {
-							// get start and end date from date pickers
-							var startDate = new Date($("#startdate").val().concat("T00:00:00"));
-							var endDate = new Date($("#enddate").val().concat("T00:00:00"));
+
+						else
+						{
+							//call process() within serverRequest.js to make request to server
+							process();
 
 							$("#play").prop('disabled', false);
 
-							// promise represents a value that may be available now, in the future or never
-							var p1 = new Promise(function(resolve, reject) {
+							var p1 = new Promise(function(resolve, reject){
 								var timeUnit = getTimeUnit();
-								if(timeUnit >= 0 && timeUnit <= 3) {
+								if(timeUnit >= 0 && timeUnit <= 3)
+								{
 									resolve(timeUnit);
 								}
-								else {
+								else
+								{
 									reject(-1);
 								}
 							});
-
-							// uses promise object and value, value == timeUnits
-							p1.then(function(value) {
-								var dots = getDots(startDate, endDate, value);
+							p1.then(function(value){
+								console.log(allDetections);
+								var dots = getDots(value);
 								if(dots.length === 0) {
 									$("#start").prop('disabled', true);
 									$("#stop").prop('disabled', true);
@@ -194,15 +206,13 @@
 									setTimeout(function(){ initDetections(value, timeUnit); }, 300);
 								}
 							});
-							$("#trackMenu").toggle("slow");
 						}
 					}
-					// button text == Clear
-					// reset UI, clear text, clear detection dots from map
-					else if(v === "Clear") {
+					else if(v === "Clear")
+					{
 						$("#play").text("Play");
 						d3.select("#play").on("click", function() {
-							clearInterval(myTimer);
+							clearInterval (myTimer);
 						});
 						$("#play").prop('disabled', true);
 						$("#rangeSlider").val("0");
@@ -221,39 +231,26 @@
 						return "Generate"
 					}
 				});
-			});
-
-			/* Imports all data from .csv file with the detections data
-			* @param string, file name
-			* Parse data from .csv file into allDetections array
-			*/
-			d3.csv("JWS_20150914_export.csv", function(err, data) {
-				for(i = 0; i < data.length; i++) {
-					//use library XDate to help convert date; [0] is needed because otherwise 'date object' is inside an array of object.
-					allDetections[i] = {lat: data[i].Latitude, lng: data[i].Longitude, dateTime: (new XDate (data[i]["Date and Time (UTC)"].replace(/\s+/g, 'T'), true))[0]};
-				}
-				console.log("parsing completed");
-			});
+			});//#generate
 
 			/*
 			* This function fills the dots array with detections based on the starting date and ending date.
-			* It then adds that data to the circles svg element to create cirlces from that data.
-			* The circles are then displayed and blinked when the user clicks play.
-			* Has functions in it.
+			* It then adds that data to the circles svg element to create cirlces from that data. The circles
+			* are then displayed and blinked when the user clicks start.
 			*/
 			function initDetections(dots, timeUnit) {
-				//d3
-				circles = svg.selectAll("circle")
+
+			circles = svg.selectAll("circle")
 						.data(dots)
 						.enter()
 						.append("circle")
 						.attr("cx", function(d)
 						{
-								return project(d).x; // simply use return project(d).x to display all
+								return project(d).x;//simply use return project(d).x to display all (no if statement)
 						})
 						.attr("cy", function(d)
 						{
-								return project(d).y; // simply use return project(d).y to display all
+								return project(d).y;//simply use return project(d).y to display all (no if statement)
 						})
 						.style({
 							fill: "#ff1a1a",
@@ -264,7 +261,7 @@
 						.attr("r", 2)
 						.attr("id", function(d){
 							return d.dateTime;
-						})
+						});
 
 				/* play button clicked
 				* 	when play button is clicked:
@@ -282,8 +279,8 @@
 									t = +b.property("min");
 								}
 								b.property("value", t);
-								drawDetections(t);
-								dateTag(t);
+								drawDetections(t, dots);
+								dateTag(t, timeUnit, dots);
 							}, 1000);
 						d3.select("#play").text("Pause");
 					}
@@ -318,120 +315,17 @@
 							.css('top', e.pageY)
 							.css('left', e.pageX)
 							.appendTo("body");
-					}, function() {
+					}, function(){
 						$("#details").hide();
 					});
 				});
+
 			}
 
-			/* Sets the date tag text (date and hour) based on current step
-			* @param current step, index of dots array that the slider is currently on
-			*/
-			function dateTag(currentStep)
-			{
-				if(timeUnit === 0) {
-					$("#currentHour").text(getSliderHour(dots, currentStep))
-				}
-				else {
-					$("#currentDate").text(getSliderDate(dots, currentStep));
-				}
-			}
-
-			/* Adds all the detections to the map with a radius of 2 and blinks
-			* detections based on the current step on the slider
-			* @param currentStep, index of dots array that the slider is currently on
-			*/
-			function drawDetections(currentStep) {
-				// add this to fixed the circle size
-				var max_rad = $(window).height() * 0.15;//dynamcially change base on screen size
-				var maxDetectionCount = Math.max.apply(Math,dots.map(function(o){
-												return o.count;
-											})); // maximum detection at a single location/dot
-
-				circles
-				.attr("cx", function(d)
-				{
-					return project(d).x;
-				})
-				.attr("cy", function(d)
-				{
-					return project(d).y;
-				})
-				.style({
-					fill: "#ff1a1a",
-					"fill-opacity": 0.6,
-					stroke: "#004d60",
-					"stroke-width": 1
-				})
-				.transition().duration(500)
-				.attr("r", function(d)
-				{
-					if(d.tm === currentStep)
-						// return d.rad;//simply use return d.rad to display all (no if statement)
-						return d.count * max_rad / maxDetectionCount;
-					else
-						return 2;
-				})
-			}
-
-			/* This function resizes the screen based on the detections.
-			* map is the mapbox library/api object.
-			*/
-			function fitToScreen(dots)
-			{
-				map.fitBounds(dots); //calls the mapbox mqp object.
-				return dots;
-			}
-
-			/* This function clears all the user inputs and removes the
-			*  detections from the map.
-			*/
-			function clearDetections()
-			{
-				startDate = new Date();
-				endDate = new Date();
-				startIndex = 0;
-				endIndex = 0;
-				timeUnit = 0;
-				dots = [];
-				circles.remove();
-			}
-			/* This function returns a point based on latidude and longitude.
-			*  @param ll The longitude and longitude of a detection.
-			*  @return num This returns the map layer point.
-			*/
-			function project(ll)
-			{
-				var point = map.latLngToLayerPoint(L.latLng(ll))
-				return point;
-			}
-			
-		//Might not need this
-		//filering data base on userInput(dates)
-		//	function dateFilter(data, start_date, end_date) {
-		//
-		//		var newData = [];
-		//
-		//		for(i =0; i < data.length - 1; i++) {
-		//			if( +start_date <= +data[i].dateTime && +data[i].dateTime <= +end_date) {
-		//				newData.push(data[i]);
-		//			}
-		//		}
-		//
-		//		return newData;
-		//	}//end: dateFilter()
-
-		// function removeZeroCountDot(dots) {
-		// 	var noZeroDots = [];
-		// 	for( i=0; i < dots.length; i++) {
-		// 		if (dots[i].count > 0) {
-		// 			noZeroDots.push(dots[i]);
-		// 		}
-		// 	}
-		// 	return noZeroDots;
-		// }
 		</script>
 
 	</body>
-
+	<footer>
+		<!--empty-->
+	</footer>
 </html>
